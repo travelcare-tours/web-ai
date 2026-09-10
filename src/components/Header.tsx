@@ -14,13 +14,13 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all">
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 sm:h-16">
+        <div className="flex items-center justify-between h-16 sm:h-[72px]">
           {/* Logo */}
           <a href="#home" className="flex items-center gap-2 group focus:outline-hidden py-1" aria-label="Travel Care Tours Home">
             <img
               src={headerLogoSrc}
               alt="Travel Care Tours"
-              className="h-9 sm:h-11 w-auto max-h-12 object-contain transition-transform group-hover:scale-[1.01]"
+              className="w-[180px] h-[51px] max-h-[51px] object-contain transition-transform group-hover:scale-[1.01]"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 const step = Number(target.dataset.fallbackStep || '0');

@@ -274,7 +274,7 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                       {customPlaces.map((place) => (
                         <span
                           key={place}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-950 border border-emerald-200 text-xs font-semibold shadow-2xs"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 text-slate-900 border border-emerald-300 text-xs font-semibold shadow-2xs"
                         >
                           <span>{place}</span>
                           <button

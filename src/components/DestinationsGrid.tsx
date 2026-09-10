@@ -52,8 +52,14 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
 
-                {/* Shading Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent transition-colors duration-300" />
+                {/* Shading / Gradient Overlay: Deep blue-to-emerald gradient when selected */}
+                <div
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    isSelected
+                      ? 'bg-gradient-to-t from-[#051930]/95 via-[#083344]/80 to-[#064e3b]/50'
+                      : 'bg-gradient-to-t from-black/90 via-black/35 to-transparent'
+                  }`}
+                />
 
                 {/* Top Badge: Selection Indicator */}
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
@@ -98,11 +104,6 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                     Best Season: {dest.bestTime}
                   </p>
                 </div>
-
-                {/* Sleek bottom emerald accent line when selected */}
-                {isSelected && (
-                  <div className="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 z-20" />
-                )}
               </div>
             );
           })}

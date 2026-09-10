@@ -12,7 +12,7 @@ export const COMPANY_DETAILS = {
   experience: "12+ Years",
   openingHours: "Open Daily 6:00 AM – 10:00 PM (16/7 Guest Support)",
   // Optional: Paste your Google Apps Script Web App URL here or set VITE_GOOGLE_SHEET_WEBHOOK_URL in .env
-  googleSheetWebhookUrl: "https://script.google.com/macros/library/d/1MiPexhYAi-MeF1lMYgD5THdMGUj11u205cyzpSH6jx75qqL1qoCjxxqp/1",
+  googleSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbyZjrG1vzNOf-P3Jl0Scs3ml2X0ey0YYDsWA9yA8LO48pDL-AR4iO_qivvp3LQppBKv/exec",
 };
 
 export const DESTINATIONS: Destination[] = [
