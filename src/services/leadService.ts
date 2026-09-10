@@ -48,12 +48,34 @@ export async function submitTripEnquiry(data: TripEnquiryData): Promise<{ succes
   }
 
   try {
-    // Use mode: 'no-cors' so that Google Apps Script 302 redirects are executed cleanly without CORS block
-    await fetch(webhookUrl.trim(), {
+    // Append URL parameters as fallback so Google Apps Script handles e.parameter or e.postData
+    const params = new URLSearchParams({
+      guestName: payload.guestName,
+      phone: payload.phone,
+      travelMonth: payload.travelMonth || '',
+      nights: String(payload.nights),
+      adults: String(payload.adults),
+      children: String(payload.children || 0),
+      destinations: payload.destinations,
+      hotelTier: payload.hotelTier,
+      vehicle: payload.vehicle,
+      inclusions: payload.inclusions,
+      specialNote: payload.specialNote || '',
+      packageTitle: payload.packageTitle || '',
+      timestamp: payload.timestamp,
+    });
+
+    const cleanUrl = webhookUrl.trim();
+    const endpointWithParams = cleanUrl.includes('?')
+      ? `${cleanUrl}&${params.toString()}`
+      : `${cleanUrl}?${params.toString()}`;
+
+    // Use mode: 'no-cors' with text/plain so that browser sends without preflight CORS rejection
+    await fetch(endpointWithParams, {
       method: 'POST',
       mode: 'no-cors',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain;charset=utf-8',
       },
       body: JSON.stringify(payload),
     });

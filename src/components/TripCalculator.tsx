@@ -105,47 +105,69 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     if (jeepSafari) extras.push('Off-road Jeep Safari');
 
     // -------------------------------------------------------------
-    // WHATSAPP MESSAGE LAYOUT: Edit the message template lines below
+    // WHATSAPP MESSAGE
     // -------------------------------------------------------------
-const msg = [
-  'Hello Travel Care Tours! 👋',
-  'I calculated a custom Kerala holiday plan for you:',
-  '',
-  `👤 Guest Name: ${guestName.trim()}`,
-  `📱 WhatsApp / Phone: ${cleanedPhone}`,
-  travelMonth.trim() ? `📅 Travel Month / Dates: ${travelMonth.trim()}` : '',
-  `🌴 Duration: ${nights} Nights / ${nights + 1} Days`,
-  `👨‍👩‍👧 Guests: ${adults} Adult(s)${children > 0 ? `, ${children} Child(ren)` : ''}`,
-  selectedPackageTitle && selectedPackageTitle !== 'Not decided yet' ? `🎯 Package Theme: ${selectedPackageTitle}` : '',
-  `📍 Selected Destinations: ${destList}`,
-  `🏨 Resort Category: ${hotelTier}`,
-  `🚗 Private Transport: ${vehicle}`,
-  extras.length > 0 ? `✨ Inclusions / Activities: ${extras.join(', ')}` : '',
-  specialNote.trim() ? `📝 Special Notes: ${specialNote.trim()}` : '',
-  '',
-  '📩 Please send me the day-wise itinerary proposal and best price quote.',
-  'Thank you! 🙏'
-].filter(Boolean).join('\n');
 
-    // Automatically sync enquiry with Google Sheets (and local archive backup)
-    submitTripEnquiry({
-      guestName: guestName.trim(),
-      phone: cleanedPhone,
-      travelMonth: travelMonth.trim(),
-      nights,
-      adults,
-      children,
-      destinations: destList,
-      hotelTier,
-      vehicle,
-      inclusions: extras.join(', ') || 'Standard Package',
-      specialNote: specialNote.trim(),
-      packageTitle: selectedPackageTitle !== 'Not decided yet' ? selectedPackageTitle : undefined,
-    });
+    // Emoji characters are generated programmatically to avoid
+    // UTF-8 / browser encoding issues on desktop browsers.
+    const emoji = {
+      wave: String.fromCodePoint(0x1F44B),
+      person: String.fromCodePoint(0x1F464),
+      phone: String.fromCodePoint(0x1F4F1),
+      calendar: String.fromCodePoint(0x1F4C5),
+      palm: String.fromCodePoint(0x1F334),
+      family: String.fromCodePoint(0x1F468, 0x200D, 0x1F469, 0x200D, 0x1F467),
+      target: String.fromCodePoint(0x1F3AF),
+      location: String.fromCodePoint(0x1F4CD),
+      hotel: String.fromCodePoint(0x1F3E8),
+      car: String.fromCodePoint(0x1F697),
+      sparkle: String.fromCodePoint(0x2728),
+      note: String.fromCodePoint(0x1F4DD),
+      email: String.fromCodePoint(0x1F4E9),
+      pray: String.fromCodePoint(0x1F64F),
+    };
 
-    const url = `https://wa.me/${COMPANY_DETAILS.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+    const msg = [
+      `Hello Travel Care Tours! ${emoji.wave}`,
+      'I calculated a custom Kerala holiday plan for you:',
+      '',
+      `${emoji.person} Guest Name: ${guestName.trim()}`,
+      `${emoji.phone} WhatsApp / Phone: ${cleanedPhone}`,
+      travelMonth.trim()
+        ? `${emoji.calendar} Travel Month / Dates: ${travelMonth.trim()}`
+        : '',
+      `${emoji.palm} Duration: ${nights} Nights / ${nights + 1} Days`,
+      `${emoji.family} Guests: ${adults} Adult(s)${children > 0 ? `, ${children} Child(ren)` : ''}`,
+      selectedPackageTitle && selectedPackageTitle !== 'Not decided yet'
+        ? `${emoji.target} Package Theme: ${selectedPackageTitle}`
+        : '',
+      `${emoji.location} Selected Destinations: ${destList}`,
+      `${emoji.hotel} Resort Category: ${hotelTier}`,
+      `${emoji.car} Private Transport: ${vehicle}`,
+      extras.length > 0
+        ? `${emoji.sparkle} Inclusions / Activities: ${extras.join(', ')}`
+        : '',
+      specialNote.trim()
+        ? `${emoji.note} Special Notes: ${specialNote.trim()}`
+        : '',
+      '',
+      `${emoji.email} Please send me the day-wise itinerary proposal and best price quote.`,
+      `Thank you! ${emoji.pray}`,
+    ].filter(Boolean).join('\n');
+
+
+    // -------------------------------------------------------------
+    // SEND TO WHATSAPP
+    // -------------------------------------------------------------
+
+    const whatsappNumber = String(COMPANY_DETAILS.whatsappNumber)
+      .replace(/\D/g, '');
+
+    const encodedMessage = encodeURIComponent(msg);
+
+    const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
     window.open(url, '_blank');
-  };
 
   const allSelectedCount = selectedDests.length + customPlaces.length;
 
@@ -189,7 +211,7 @@ const msg = [
                         onClick={() => onToggleDest(d.name)}
                         className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none ${
                           isPicked
-                            ? 'bg-brand-navy text-white shadow-md shadow-brand-navy/25 ring-2 ring-brand-green ring-offset-1 scale-[1.02]'
+                            ? 'bg-brand-navy text-white shadow-md shadow-brand-navy/25 scale-[1.02]'
                             : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700 hover:text-brand-navy border border-slate-200/80'
                         }`}
                       >

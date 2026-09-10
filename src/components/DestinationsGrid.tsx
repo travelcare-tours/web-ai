@@ -40,8 +40,8 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                 onClick={() => onSelectDestination(dest.name)}
                 className={`group relative rounded-xl sm:rounded-2xl overflow-hidden aspect-[4/3.2] sm:aspect-[4/5] cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ${
                   isSelected
-                    ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-slate-900 border-2 border-emerald-500 shadow-xl shadow-emerald-950/30 scale-[1.01]'
-                    : 'border border-slate-200 hover:border-emerald-400/60'
+                    ? 'border-2 border-brand-green shadow-lg scale-[1.01]'
+                    : 'border border-slate-200 hover:border-brand-green/60'
                 }`}
               >
                 {/* Destination Image */}
@@ -52,21 +52,15 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
 
-                {/* Shading Overlay: Enhanced with subtle emerald ambient tint when selected */}
-                <div
-                  className={`absolute inset-0 transition-colors duration-300 ${
-                    isSelected
-                      ? 'bg-gradient-to-t from-emerald-950/95 via-black/40 to-black/20'
-                      : 'bg-gradient-to-t from-black/90 via-black/35 to-transparent'
-                  }`}
-                />
+                {/* Shading Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent transition-colors duration-300" />
 
                 {/* Top Badge: Selection Indicator */}
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
                   <span
                     className={`inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all ${
                       isSelected
-                        ? 'bg-emerald-500 text-white shadow-md shadow-emerald-900/40 ring-1 ring-white/60'
+                        ? 'bg-brand-green text-white shadow-md'
                         : 'bg-black/50 text-white backdrop-blur-md group-hover:bg-brand-green group-hover:text-white'
                     }`}
                   >
