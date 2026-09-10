@@ -27,8 +27,8 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
           </p>
         </div>
 
-        {/* 8-Destination Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* 8-Destination Grid: 2-column on mobile with compact height, 4-column on desktop */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {DESTINATIONS.map((dest) => {
             const isSelected = selectedDestinations.some(
               (d) => d.toLowerCase() === dest.name.toLowerCase()
@@ -38,8 +38,10 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
               <div
                 key={dest.id}
                 onClick={() => onSelectDestination(dest.name)}
-                className={`group relative rounded-2xl overflow-hidden aspect-[4/5] cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 border ${
-                  isSelected ? 'ring-4 ring-brand-green border-brand-green' : 'border-slate-200'
+                className={`group relative rounded-xl sm:rounded-2xl overflow-hidden aspect-[4/3.2] sm:aspect-[4/5] cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 ${
+                  isSelected
+                    ? 'ring-2 ring-emerald-400 ring-offset-2 ring-offset-slate-900 border-2 border-emerald-500 shadow-xl shadow-emerald-950/30 scale-[1.01]'
+                    : 'border border-slate-200 hover:border-emerald-400/60'
                 }`}
               >
                 {/* Destination Image */}
@@ -49,50 +51,63 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
 
-                {/* Gradient Shading */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                {/* Shading Overlay: Enhanced with subtle emerald ambient tint when selected */}
+                <div
+                  className={`absolute inset-0 transition-colors duration-300 ${
+                    isSelected
+                      ? 'bg-gradient-to-t from-emerald-950/95 via-black/40 to-black/20'
+                      : 'bg-gradient-to-t from-black/90 via-black/35 to-transparent'
+                  }`}
+                />
 
                 {/* Top Badge: Selection Indicator */}
-                <div className="absolute top-3 right-3 z-10">
+                <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
                   <span
-                    className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full transition-all ${
+                    className={`inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full transition-all ${
                       isSelected
-                        ? 'bg-brand-green text-white shadow-md'
-                        : 'bg-black/40 text-white backdrop-blur-md group-hover:bg-brand-green group-hover:text-white'
+                        ? 'bg-emerald-500 text-white shadow-md shadow-emerald-900/40 ring-1 ring-white/60'
+                        : 'bg-black/50 text-white backdrop-blur-md group-hover:bg-brand-green group-hover:text-white'
                     }`}
                   >
                     {isSelected ? (
                       <>
-                        <Check className="w-3 h-3" />
-                        <span>Selected</span>
+                        <Check className="w-3 h-3 stroke-[2.5]" />
+                        <span className="hidden xs:inline">Selected</span>
+                        <span className="xs:hidden">Added</span>
                       </>
                     ) : (
                       <>
-                        <Plus className="w-3 h-3" />
-                        <span>Add to Trip</span>
+                        <Plus className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                        <span className="hidden xs:inline">Add to Trip</span>
+                        <span className="xs:hidden">Add</span>
                       </>
                     )}
                   </span>
                 </div>
 
-                {/* Bottom Content */}
-                <div className="absolute bottom-0 inset-x-0 p-5 text-white z-10 space-y-1">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-brand-green-soft">
+                {/* Bottom Content with Larger, High-Contrast Typography */}
+                <div className="absolute bottom-0 inset-x-0 p-2.5 sm:p-5 text-white z-10 space-y-0.5 sm:space-y-1">
+                  <span className="text-[9px] sm:text-[11px] font-extrabold uppercase tracking-wider text-emerald-400 drop-shadow-xs block">
                     {dest.category}
                   </span>
                   <div className="flex items-center justify-between">
-                    <h3 className="text-2xl font-bold font-display text-white group-hover:text-brand-green-soft transition-colors">
+                    <h3 className="text-base sm:text-2xl font-bold font-display tracking-tight text-white group-hover:text-emerald-300 transition-colors drop-shadow-sm">
                       {dest.name}
                     </h3>
-                    <ArrowUpRight className="w-5 h-5 text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    <ArrowUpRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white/70 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
                   </div>
-                  <p className="text-xs text-slate-200 line-clamp-2">
+                  <p className="text-[10px] sm:text-xs text-slate-200 line-clamp-1 sm:line-clamp-2">
                     {dest.subtitle}
                   </p>
-                  <p className="text-[11px] text-brand-green-soft font-semibold pt-1">
+                  <p className="text-[9px] sm:text-[11px] text-emerald-300 font-semibold pt-0.5 sm:pt-1 hidden sm:block">
                     Best Season: {dest.bestTime}
                   </p>
                 </div>
+
+                {/* Sleek bottom emerald accent line when selected */}
+                {isSelected && (
+                  <div className="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 z-20" />
+                )}
               </div>
             );
           })}

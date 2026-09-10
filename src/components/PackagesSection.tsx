@@ -43,12 +43,12 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({
         </div>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap items-center gap-2 mb-10">
+        <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap items-center gap-2 pb-2 sm:pb-0 mb-8 sm:mb-10 -mx-4 px-4 sm:mx-0 sm:px-0">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`shrink-0 whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeCategory === cat
                   ? 'bg-brand-navy text-white shadow-md'
                   : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'

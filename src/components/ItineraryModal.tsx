@@ -18,13 +18,16 @@ export const ItineraryModal: React.FC<ItineraryModalProps> = ({ pkg, onClose, on
   )}`;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/65 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/65 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-6 animate-fadeIn">
       <div
-        className="relative bg-white rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col animate-scaleUp"
+        className="relative bg-white rounded-t-3xl sm:rounded-3xl max-w-4xl w-full max-h-[92vh] sm:max-h-[90vh] overflow-hidden shadow-2xl flex flex-col animate-scaleUp"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Mobile top pill indicator */}
+        <div className="w-12 h-1.5 bg-white/80 rounded-full mx-auto absolute top-2.5 left-1/2 -translate-x-1/2 z-30 sm:hidden shadow-sm" />
+
         {/* Modal Header with Package Banner */}
-        <div className="relative h-56 sm:h-64 shrink-0 overflow-hidden">
+        <div className="relative h-48 sm:h-64 shrink-0 overflow-hidden">
           <img
             src={pkg.image}
             alt={pkg.title}
@@ -148,31 +151,31 @@ export const ItineraryModal: React.FC<ItineraryModalProps> = ({ pkg, onClose, on
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
-          <div>
+        <div className="p-3 sm:p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0">
+          <div className="hidden sm:block">
             <span className="text-xs text-slate-500 font-semibold uppercase">Pricing & Inclusions</span>
             <p className="text-sm font-bold text-slate-900">Customized Quotes Available Instantly</p>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <button
               onClick={() => {
                 onClose();
                 onBookNow(pkg.title);
               }}
-              className="flex-1 sm:flex-initial px-5 py-2.5 rounded-full text-sm font-bold text-brand-navy bg-white hover:bg-slate-100 border border-slate-300 transition-colors cursor-pointer"
+              className="flex-1 sm:flex-initial px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-brand-navy bg-white hover:bg-slate-100 border border-slate-300 transition-colors cursor-pointer text-center"
             >
-              Custom Enquiry Form
+              Plan Trip
             </button>
 
             <a
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-md shadow-[#25D366]/25 transition-all hover:scale-105 cursor-pointer"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-md shadow-[#25D366]/25 transition-all hover:scale-105 cursor-pointer text-center"
             >
-              <WhatsAppIcon variant="white" className="w-4 h-4 fill-white" />
-              <span>Get Quote on WhatsApp</span>
+              <WhatsAppIcon variant="white" className="w-4 h-4 fill-white shrink-0" />
+              <span>Quote on WhatsApp</span>
             </a>
           </div>
         </div>

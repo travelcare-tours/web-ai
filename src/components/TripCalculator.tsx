@@ -5,8 +5,9 @@ import {
   MapPin,
   Users,
   Calendar,
-  ShieldCheck,
+  Building,
   Car,
+  Sparkles,
   User,
   Phone,
   CalendarDays,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 import { DESTINATIONS, COMPANY_DETAILS } from '../data/travelData';
 import { WhatsAppIcon } from './WhatsAppIcon';
+import { submitTripEnquiry } from '../services/leadService';
 
 interface TripCalculatorProps {
   selectedDests: string[];
@@ -84,8 +86,13 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
       setValidationError('Please provide your Name so we can personalize your itinerary.');
       return;
     }
-    if (!guestPhone.trim()) {
-      setValidationError('Please provide your WhatsApp or Phone number to receive the proposal.');
+    const cleanedPhone = guestPhone.replace(/\D/g, '');
+    if (!cleanedPhone) {
+      setValidationError('Please provide your 10-digit mobile number to receive the proposal.');
+      return;
+    }
+    if (cleanedPhone.length !== 10) {
+      setValidationError('Please enter a valid 10-digit mobile number without country code (e.g. 9876543210).');
       return;
     }
     setValidationError(null);
@@ -97,23 +104,44 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     if (spiceTour) extras.push('Spice Plantation Tour');
     if (jeepSafari) extras.push('Off-road Jeep Safari');
 
-    const msg = [
-      'Hello Travel Care Tours! I calculated a custom Kerala holiday plan:',
-      '',
-      `• Guest Name: ${guestName.trim()}`,
-      `• WhatsApp / Phone: ${guestPhone.trim()}`,
-      travelMonth.trim() ? `• Travel Month / Dates: ${travelMonth.trim()}` : '',
-      `• Duration: ${nights} Nights / ${nights + 1} Days`,
-      `• Guests: ${adults} Adult(s)${children > 0 ? `, ${children} Child(ren)` : ''}`,
-      selectedPackageTitle && selectedPackageTitle !== 'Not decided yet' ? `• Package Theme: ${selectedPackageTitle}` : '',
-      `• Selected Destinations: ${destList}`,
-      `• Resort Category: ${hotelTier}`,
-      `• Private Transport: ${vehicle}`,
-      extras.length > 0 ? `• Inclusions / Activities: ${extras.join(', ')}` : '',
-      specialNote.trim() ? `• Special Notes: ${specialNote.trim()}` : '',
-      '',
-      'Please send me the day-wise itinerary proposal and best price quote. Thank you!'
-    ].filter(Boolean).join('\n');
+    // -------------------------------------------------------------
+    // WHATSAPP MESSAGE LAYOUT: Edit the message template lines below
+    // -------------------------------------------------------------
+const msg = [
+  'Hello Travel Care Tours! 👋',
+  'I calculated a custom Kerala holiday plan for you:',
+  '',
+  `👤 Guest Name: ${guestName.trim()}`,
+  `📱 WhatsApp / Phone: ${cleanedPhone}`,
+  travelMonth.trim() ? `📅 Travel Month / Dates: ${travelMonth.trim()}` : '',
+  `🌴 Duration: ${nights} Nights / ${nights + 1} Days`,
+  `👨‍👩‍👧 Guests: ${adults} Adult(s)${children > 0 ? `, ${children} Child(ren)` : ''}`,
+  selectedPackageTitle && selectedPackageTitle !== 'Not decided yet' ? `🎯 Package Theme: ${selectedPackageTitle}` : '',
+  `📍 Selected Destinations: ${destList}`,
+  `🏨 Resort Category: ${hotelTier}`,
+  `🚗 Private Transport: ${vehicle}`,
+  extras.length > 0 ? `✨ Inclusions / Activities: ${extras.join(', ')}` : '',
+  specialNote.trim() ? `📝 Special Notes: ${specialNote.trim()}` : '',
+  '',
+  '📩 Please send me the day-wise itinerary proposal and best price quote.',
+  'Thank you! 🙏'
+].filter(Boolean).join('\n');
+
+    // Automatically sync enquiry with Google Sheets (and local archive backup)
+    submitTripEnquiry({
+      guestName: guestName.trim(),
+      phone: cleanedPhone,
+      travelMonth: travelMonth.trim(),
+      nights,
+      adults,
+      children,
+      destinations: destList,
+      hotelTier,
+      vehicle,
+      inclusions: extras.join(', ') || 'Standard Package',
+      specialNote: specialNote.trim(),
+      packageTitle: selectedPackageTitle !== 'Not decided yet' ? selectedPackageTitle : undefined,
+    });
 
     const url = `https://wa.me/${COMPANY_DETAILS.whatsappNumber}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
@@ -143,17 +171,12 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             {/* Left Options Controls */}
             <div className="lg:col-span-8 space-y-8">
-              {/* 1. Destinations selector + Custom Places Input */}
+              {/* Destinations selector + Custom Places Input */}
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-brand-green" />
-                    <span>1. Choose Kerala Destinations</span>
-                  </label>
-                  <span className="text-xs text-brand-green font-semibold">
-                    {allSelectedCount} place{allSelectedCount === 1 ? '' : 's'} included
-                  </span>
-                </div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2 mb-3">
+                  <MapPin className="w-4 h-4 text-brand-green shrink-0" />
+                  <span>Choose Kerala Destinations</span>
+                </label>
 
                 {/* Major Kerala Destination Badges */}
                 <div className="flex flex-wrap gap-2">
@@ -164,13 +187,13 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                         key={d.id}
                         type="button"
                         onClick={() => onToggleDest(d.name)}
-                        className={`px-4 py-2 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                        className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer select-none ${
                           isPicked
-                            ? 'bg-brand-navy text-white shadow-sm ring-2 ring-brand-navy/20'
-                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+                            ? 'bg-brand-navy text-white shadow-md shadow-brand-navy/25 ring-2 ring-brand-green ring-offset-1 scale-[1.02]'
+                            : 'bg-slate-100 hover:bg-slate-200/80 text-slate-700 hover:text-brand-navy border border-slate-200/80'
                         }`}
                       >
-                        {isPicked ? <Check className="w-3.5 h-3.5 text-brand-green-soft" /> : null}
+                        {isPicked ? <Check className="w-3.5 h-3.5 text-brand-green-soft stroke-[2.5]" /> : null}
                         <span>{d.name}</span>
                       </button>
                     );
@@ -179,12 +202,9 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
 
                 {/* Space to Add Custom Places / Offbeat Stops */}
                 <div className="mt-4 pt-3.5 border-t border-slate-100 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-700">
-                      Add More Places or Offbeat Stops:
-                    </label>
-                    <span className="text-[11px] text-slate-400">e.g. Kumarakom, Jatayu Rock, Marari, Bekal</span>
-                  </div>
+                  <label className="block text-xs font-bold text-slate-700">
+                    Add More Places or Offbeat Stops:
+                  </label>
 
                   <div className="flex gap-2">
                     <input
@@ -230,6 +250,17 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                       ))}
                     </div>
                   )}
+
+                  {/* Relocated: Places included count & example hint at the bottom */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pt-2 text-xs">
+                    <span className="text-brand-green font-semibold flex items-center gap-1.5">
+                      <Check className="w-3.5 h-3.5 text-brand-green" />
+                      <span>{allSelectedCount} place{allSelectedCount === 1 ? '' : 's'} included</span>
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      e.g. Kumarakom, Jatayu Rock, Marari, Bekal
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -260,11 +291,12 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                     <Users className="w-4 h-4 text-brand-green" />
                     <span>Adults</span>
                   </label>
-                  <div className="flex items-center rounded-xl border border-slate-200 overflow-hidden bg-slate-50">
+                  <div className="flex items-center rounded-xl border border-slate-200 overflow-hidden bg-slate-50 min-h-[44px]">
                     <button
                       type="button"
                       onClick={() => handleAdultsChange(adults - 1)}
-                      className="px-3 py-2 text-slate-600 hover:bg-slate-200 font-bold cursor-pointer"
+                      className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
+                      aria-label="Decrease adults"
                     >
                       -
                     </button>
@@ -274,7 +306,8 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                     <button
                       type="button"
                       onClick={() => handleAdultsChange(adults + 1)}
-                      className="px-3 py-2 text-slate-600 hover:bg-slate-200 font-bold cursor-pointer"
+                      className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
+                      aria-label="Increase adults"
                     >
                       +
                     </button>
@@ -286,11 +319,12 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                     <Users className="w-4 h-4 text-brand-green" />
                     <span>Children (&lt;12 yrs)</span>
                   </label>
-                  <div className="flex items-center rounded-xl border border-slate-200 overflow-hidden bg-slate-50">
+                  <div className="flex items-center rounded-xl border border-slate-200 overflow-hidden bg-slate-50 min-h-[44px]">
                     <button
                       type="button"
                       onClick={() => setChildren(Math.max(0, children - 1))}
-                      className="px-3 py-2 text-slate-600 hover:bg-slate-200 font-bold cursor-pointer"
+                      className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
+                      aria-label="Decrease children"
                     >
                       -
                     </button>
@@ -300,7 +334,8 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                     <button
                       type="button"
                       onClick={() => setChildren(children + 1)}
-                      className="px-3 py-2 text-slate-600 hover:bg-slate-200 font-bold cursor-pointer"
+                      className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
+                      aria-label="Increase children"
                     >
                       +
                     </button>
@@ -311,8 +346,9 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
               {/* 3. Resort Tier & Vehicle */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-                    Resort / Hotel Category
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-2">
+                    <Building className="w-4 h-4 text-brand-green shrink-0" />
+                    <span>Resort / Hotel Category</span>
                   </label>
                   <select
                     value={hotelTier}
@@ -326,8 +362,8 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-1.5">
-                    <Car className="w-4 h-4 text-brand-green" />
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-2">
+                    <Car className="w-4 h-4 text-brand-green shrink-0" />
                     <span>Dedicated Private Vehicle</span>
                   </label>
                   <select
@@ -345,8 +381,9 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
 
               {/* 4. Experiences Add-ons */}
               <div className="pt-4 border-t border-slate-100">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3">
-                  Signature Experiences to Include
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-brand-green shrink-0" />
+                  <span>Signature Experiences to Include</span>
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <label className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${
@@ -387,15 +424,12 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                 </div>
               </div>
 
-              {/* 5. Required Guest Information */}
+              {/* Required Guest Information */}
               <div className="pt-4 border-t border-slate-100 space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                    <User className="w-4 h-4 text-brand-green" />
-                    <span>5. Your Contact Information (Required for Itinerary)</span>
-                  </label>
-                  <span className="text-[11px] text-slate-400 font-medium">Direct WhatsApp Quote</span>
-                </div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+                  <User className="w-4 h-4 text-brand-green shrink-0" />
+                  <span>Your Contact Information (Required for Itinerary)</span>
+                </label>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -423,25 +457,32 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Phone / WhatsApp Number <span className="text-rose-500">*</span>
+                      10-Digit Mobile / WhatsApp Number <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
                       <input
                         type="tel"
-                        placeholder="e.g. +91 98765 43210"
+                        inputMode="numeric"
+                        pattern="[0-9]{10}"
+                        maxLength={10}
+                        placeholder="10-digit number (e.g. 9876543210)"
                         value={guestPhone}
                         onChange={(e) => {
-                          setGuestPhone(e.target.value);
+                          const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
+                          setGuestPhone(digitsOnly);
                           if (validationError) setValidationError(null);
                         }}
                         className={`w-full pl-9 pr-3.5 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
-                          validationError && !guestPhone.trim()
+                          validationError && (!guestPhone.trim() || guestPhone.replace(/\D/g, '').length !== 10)
                             ? 'border-rose-400 bg-rose-50/40 focus:ring-rose-400'
                             : 'border-slate-200 bg-white focus:border-brand-green focus:ring-brand-green'
                         }`}
                       />
                       <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
                     </div>
+                    <span className="text-[11px] text-slate-400 block mt-1">
+                      Enter 10 digits without country code or leading 0
+                    </span>
                   </div>
                 </div>
 
@@ -535,16 +576,6 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                     <span className="text-slate-500">Vehicle:</span>
                     <span className="font-bold text-slate-900 truncate max-w-[170px]" title={vehicle}>{vehicle}</span>
                   </div>
-                </div>
-
-                <div className="p-3.5 bg-white rounded-xl border border-slate-200 text-xs space-y-1">
-                  <div className="font-bold text-brand-navy flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-brand-green" />
-                    <span>Guaranteed Inclusions</span>
-                  </div>
-                  <p className="text-slate-500 text-[11px]">
-                    Daily Breakfast • Private Cab & Chauffeur • Tolls & Parking • 16/7 WhatsApp Coordination
-                  </p>
                 </div>
               </div>
 

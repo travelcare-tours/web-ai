@@ -11,7 +11,7 @@ export const FloatingWhatsApp: React.FC = () => {
   )}`;
 
   return (
-    <div className="fixed right-5 bottom-5 z-40 flex flex-col items-end gap-2">
+    <div className="hidden sm:flex fixed right-5 bottom-5 z-40 flex-col items-end gap-2">
       {/* Mini greeting bubble */}
       {showTooltip && (
         <div className="hidden sm:flex items-center gap-2 bg-white text-slate-800 p-3 rounded-2xl shadow-xl border border-slate-200 text-xs font-semibold max-w-xs animate-bounce duration-1000">

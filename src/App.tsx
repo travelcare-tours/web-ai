@@ -6,10 +6,10 @@ import { DestinationsGrid } from './components/DestinationsGrid';
 import { TripCalculator } from './components/TripCalculator';
 import { WhyUs } from './components/WhyUs';
 import { FaqSection } from './components/FaqSection';
-import { CtaBanner } from './components/CtaBanner';
 import { Footer } from './components/Footer';
 import { ItineraryModal } from './components/ItineraryModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { MobileActionDock } from './components/MobileActionDock';
 import { TourPackage } from './types';
 
 export default function App() {
@@ -51,7 +51,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-800 selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="min-h-screen flex flex-col bg-white text-slate-800 selection:bg-emerald-100 selection:text-emerald-900 pb-16 sm:pb-0">
       {/* Top Header */}
       <Header onPlanTripClick={() => scrollToSection('trip-planner')} />
 
@@ -88,9 +88,6 @@ export default function App() {
 
         {/* 6. Frequently Asked Questions */}
         <FaqSection />
-
-        {/* 7. Ready to Travel CTA */}
-        <CtaBanner onPlanTripClick={() => scrollToSection('trip-planner')} />
       </main>
 
       {/* Minimalist Brand Footer */}
@@ -103,8 +100,11 @@ export default function App() {
         onBookNow={handleSelectPackageForEnquiry}
       />
 
-      {/* Floating WhatsApp Quick Connect Button */}
+      {/* Floating WhatsApp Quick Connect Button for Tablets & Desktop */}
       <FloatingWhatsApp />
+
+      {/* Mobile Sticky Action Dock (Call, Plan Trip, WhatsApp) */}
+      <MobileActionDock onPlanTripClick={() => scrollToSection('trip-planner')} />
     </div>
   );
 }

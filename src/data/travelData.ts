@@ -11,6 +11,8 @@ export const COMPANY_DETAILS = {
   address: "Ground Flr, Mannath Bld, 36/267. Seaport-Airport Rd, Thrikkakara Ernakulam, Kerala",
   experience: "12+ Years",
   openingHours: "Open Daily 6:00 AM – 10:00 PM (16/7 Guest Support)",
+  // Optional: Paste your Google Apps Script Web App URL here or set VITE_GOOGLE_SHEET_WEBHOOK_URL in .env
+  googleSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbyZjrG1vzNOf-P3Jl0Scs3ml2X0ey0YYDsWA9yA8LO48pDL-AR4iO_qivvp3LQppBKv/exec",
 };
 
 export const DESTINATIONS: Destination[] = [
