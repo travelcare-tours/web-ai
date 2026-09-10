@@ -31,6 +31,7 @@ export const ItineraryModal: React.FC<ItineraryModalProps> = ({ pkg, onClose, on
           <img
             src={pkg.image}
             alt={pkg.title}
+            referrerPolicy="no-referrer"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-navy-deep via-brand-navy-dark/60 to-transparent" />

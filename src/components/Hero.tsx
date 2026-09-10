@@ -17,7 +17,7 @@ const HERO_BACKGROUND_SLIDES = [
   {
     title: "Kochi",
     subtitle: "Historic Fort Cochin & Chinese Fishing Nets",
-    image: "https://cdn.londonerinsydney.com/wp-content/uploads/2018/04/12161231/places-to-visit-in-fort-kochi.jpg?auto=format&fit=crop&w=2000&q=85",
+    image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=2000&q=85",
   },
   {
     title: "Munnar",
@@ -101,6 +101,7 @@ export const Hero: React.FC<HeroProps> = ({
               <img
                 src={slide.image}
                 alt={`${slide.title} - Kerala`}
+                referrerPolicy="no-referrer"
                 className={`w-full h-full object-cover object-center transition-transform duration-[6500ms] ease-out ${
                   isActive ? 'scale-105' : 'scale-100'
                 }`}

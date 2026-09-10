@@ -48,6 +48,7 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                 <img
                   src={dest.image}
                   alt={dest.name}
+                  referrerPolicy="no-referrer"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
 
