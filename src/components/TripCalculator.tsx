@@ -156,6 +156,22 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     ].filter(Boolean).join('\n');
 
 
+    // Automatically sync enquiry with Google Sheets (and local backup)
+    submitTripEnquiry({
+      guestName: guestName.trim(),
+      phone: cleanedPhone,
+      travelMonth: travelMonth.trim(),
+      nights,
+      adults,
+      children,
+      destinations: destList,
+      hotelTier,
+      vehicle,
+      inclusions: extras.join(', ') || 'Standard Package',
+      specialNote: specialNote.trim(),
+      packageTitle: selectedPackageTitle !== 'Not decided yet' ? selectedPackageTitle : undefined,
+    });
+
     // -------------------------------------------------------------
     // SEND TO WHATSAPP
     // -------------------------------------------------------------
@@ -168,6 +184,7 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
     window.open(url, '_blank');
+  };
 
   const allSelectedCount = selectedDests.length + customPlaces.length;
 
