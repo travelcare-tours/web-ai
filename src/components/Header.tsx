@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MessageCircle, Menu, X, Clock, MapPin } from 'lucide-react';
+import { Phone, Mail, Menu, X, Clock, MapPin } from 'lucide-react';
 import { COMPANY_DETAILS } from '../data/travelData';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface HeaderProps {
-  onPlanTripClick: () => void;
+  onPlanTripClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
@@ -16,56 +17,26 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all">
-      {/* Top micro-bar for quick contact */}
-      <div className="hidden lg:block bg-brand-navy-dark text-slate-200 text-xs py-1.5 px-4 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <MapPin className="w-3.5 h-3.5 text-brand-green-soft" />
-              <span>Kerala & South India Tour Specialists</span>
-            </span>
-            <span className="flex items-center gap-1.5 text-slate-300">
-              <Clock className="w-3.5 h-3.5 text-brand-green-soft" />
-              <span>24/7 Guest Assistance & WhatsApp Support</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-5">
-            <a
-              href={`mailto:${COMPANY_DETAILS.email}`}
-              className="flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors"
-            >
-              <Mail className="w-3.5 h-3.5 text-brand-green-soft" />
-              <span>{COMPANY_DETAILS.email}</span>
-            </a>
-            <a
-              href={`tel:${COMPANY_DETAILS.phone.replace(/\s+/g, '')}`}
-              className="flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5 text-brand-green-soft" />
-              <span>{COMPANY_DETAILS.phone}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-3 group focus:outline-hidden" aria-label="Travel Care Tours Home">
+          <a href="#home" className="flex items-center gap-3 group focus:outline-hidden py-1.5" aria-label="Travel Care Tours Home">
             <img
-              src={`${import.meta.env.BASE_URL}assets/TC_logo_horizontal.png`}
-              alt="Travel Care Tours Pvt Ltd logo"
-              className="h-14 md:h-16 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+              src="public/assets/TC_logo_horizontal.png"
+              alt="Travel Care Tours"
+              className="h-12 sm:h-14 md:h-16 w-auto max-h-18 object-contain transition-transform group-hover:scale-[1.02]"
               onError={(e) => {
-                // Fallback to svg if png issue
-                (e.target as HTMLImageElement).src = `${import.meta.env.BASE_URL}assets/TC_logo_horizontal.svg`;
+                const target = e.target as HTMLImageElement;
+                if (!target.src.includes('assets/TC_logo_horizontal.png')) {
+                  target.src = './assets/TC_logo_horizontal.png';
+                }
               }}
             />
           </a>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-700">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-7 text-sm font-semibold text-slate-700">
             <a href="#home" className="hover:text-brand-green transition-colors py-1">
               Home
             </a>
@@ -84,26 +55,24 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
             <a href="#faqs" className="hover:text-brand-green transition-colors py-1">
               FAQs
             </a>
-            <a href="#enquiry" className="hover:text-brand-green transition-colors py-1">
-              Contact
-            </a>
           </nav>
 
           {/* Action CTAs */}
           <div className="hidden sm:flex items-center gap-3">
-            <button
-              onClick={onPlanTripClick}
-              className="hidden lg:inline-flex items-center px-4 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-brand-navy border border-brand-navy/20 hover:bg-slate-50 transition-colors cursor-pointer"
+            <a
+              href={`tel:${COMPANY_DETAILS.phone.replace(/\s+/g, '')}`}
+              className="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-brand-navy bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-full transition-colors"
             >
-              Plan Custom Trip
-            </button>
+              <Phone className="w-3.5 h-3.5 text-brand-green" />
+              <span>{COMPANY_DETAILS.phone}</span>
+            </a>
             <a
               href={formatWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover shadow-md shadow-brand-green/20 transition-all hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center gap-2 px-4.5 py-2 rounded-full text-xs font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-md shadow-[#25D366]/25 transition-all hover:scale-[1.02] cursor-pointer"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
+              <WhatsAppIcon variant="white" className="w-4 h-4 fill-white" />
               <span>WhatsApp</span>
             </a>
           </div>
@@ -114,10 +83,10 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
               href={formatWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 text-brand-green hover:bg-emerald-50 rounded-full transition-colors"
+              className="p-2 text-[#25D366] hover:bg-emerald-50 rounded-full transition-colors flex items-center justify-center"
               aria-label="WhatsApp"
             >
-              <MessageCircle className="w-6 h-6 fill-brand-green" />
+              <WhatsAppIcon variant="official" className="w-7 h-7" />
             </a>
             <button
               type="button"
@@ -162,7 +131,7 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
             >
-              Instant Trip Planner & Quote
+              Trip Planner
             </a>
             <a
               href="#why-us"
@@ -178,13 +147,6 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
             >
               FAQs
             </a>
-            <a
-              href="#enquiry"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
-            >
-              Contact Us
-            </a>
           </nav>
 
           <div className="pt-3 border-t border-slate-200 flex flex-col gap-2">
@@ -192,9 +154,9 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
               href={formatWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white font-bold bg-brand-green shadow-md"
+              className="flex items-center justify-center gap-2.5 w-full py-3 rounded-xl text-white font-bold bg-[#25D366] hover:bg-[#20bd5a] shadow-md"
             >
-              <MessageCircle className="w-5 h-5 fill-white" />
+              <WhatsAppIcon variant="white" className="w-5 h-5 fill-white" />
               <span>Chat on WhatsApp (+91 8129070109)</span>
             </a>
             <a

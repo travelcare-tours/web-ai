@@ -8,8 +8,9 @@ export const COMPANY_DETAILS = {
   whatsappNumber: "918129070109",
   email: "travelcare598@gmail.com",
   location: "Kerala, South India",
+  address: "Ground Flr, Mannath Bld, 36/267. Seaport-Airport Rd, Thrikkakara Ernakulam, Kerala",
   experience: "12+ Years",
-  openingHours: "Open 24/7 for Guest Enquiries & Travel Support",
+  openingHours: "Open Daily 6:00 AM – 10:00 PM (16/7 Guest Support)",
 };
 
 export const DESTINATIONS: Destination[] = [
@@ -380,7 +381,7 @@ export const TESTIMONIALS: Testimonial[] = [
     name: "Dr. Anirudh & Shreya Sharma",
     location: "New Delhi",
     tripType: "Honeymoon (5N/6D Munnar & Alleppey)",
-    rating: 5,
+    rating: 4.5,
     date: "January 2025",
     comment: "Travel Care Tours planned our Kerala honeymoon to perfection. The Munnar resort was right in the middle of tea gardens, and the private houseboat in Alleppey was immaculate with delicious hot Kerala food. Our driver Pradeep was punctual, courteous, and very respectful. Highly recommended!"
   },
@@ -389,7 +390,7 @@ export const TESTIMONIALS: Testimonial[] = [
     name: "Rajesh Kulkarni & Family",
     location: "Pune, Maharashtra",
     tripType: "Family Trip (6 Adults + 2 Kids)",
-    rating: 5,
+    rating: 4,
     date: "December 2024",
     comment: "Planning a trip with elderly parents and two young kids can be stressful, but Travel Care handled everything effortlessly. The Innova Crysta was super clean, the hotels had elevators and great food, and we never felt rushed. Transparent pricing and seamless WhatsApp communication."
   },
@@ -407,7 +408,7 @@ export const TESTIMONIALS: Testimonial[] = [
     name: "Vikram & Group of Friends",
     location: "Bengaluru, Karnataka",
     tripType: "Vagamon & Munnar Adventure (12 Pax)",
-    rating: 5,
+    rating: 4.5,
     date: "November 2024",
     comment: "We booked a 17-seater Tempo Traveller for our college friends reunion. The Vagamon off-road safari, campfire night, and Munnar stay were unforgettable. Best value for money and totally genuine team."
   }

@@ -1,25 +1,33 @@
 import React, { useState } from 'react';
-import { Calculator, Check, MessageCircle, Sparkles, MapPin, Users, Calendar, ShieldCheck, Car } from 'lucide-react';
+import {
+  Calculator,
+  Check,
+  MapPin,
+  Users,
+  Calendar,
+  ShieldCheck,
+  Car,
+  User,
+  Phone,
+  CalendarDays,
+  FileText,
+  AlertCircle,
+  Plus,
+  X,
+} from 'lucide-react';
 import { DESTINATIONS, COMPANY_DETAILS } from '../data/travelData';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface TripCalculatorProps {
   selectedDests: string[];
   onToggleDest: (name: string) => void;
-  onSendToEnquiry: (details: {
-    nights: number;
-    adults: number;
-    children: number;
-    destinations: string[];
-    hotelTier: string;
-    vehicle: string;
-    houseboat: boolean;
-  }) => void;
+  selectedPackageTitle?: string;
 }
 
 export const TripCalculator: React.FC<TripCalculatorProps> = ({
   selectedDests,
   onToggleDest,
-  onSendToEnquiry,
+  selectedPackageTitle,
 }) => {
   const [nights, setNights] = useState<number>(5);
   const [adults, setAdults] = useState<number>(2);
@@ -30,8 +38,16 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
   const [spiceTour, setSpiceTour] = useState<boolean>(true);
   const [jeepSafari, setJeepSafari] = useState<boolean>(false);
 
-  // Auto-switch vehicle recommendation based on passenger count
-  const totalGuests = adults + children;
+  // Custom places added by the guest
+  const [customPlaces, setCustomPlaces] = useState<string[]>([]);
+  const [newPlaceInput, setNewPlaceInput] = useState<string>('');
+
+  // Guest Information (Required for personal proposal)
+  const [guestName, setGuestName] = useState<string>('');
+  const [guestPhone, setGuestPhone] = useState<string>('');
+  const [travelMonth, setTravelMonth] = useState<string>('');
+  const [specialNote, setSpecialNote] = useState<string>('');
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleAdultsChange = (val: number) => {
     const num = Math.max(1, val);
@@ -44,22 +60,57 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     }
   };
 
+  const handleAddPlace = () => {
+    const trimmed = newPlaceInput.trim();
+    if (!trimmed) return;
+    if (customPlaces.some((p) => p.toLowerCase() === trimmed.toLowerCase())) {
+      setNewPlaceInput('');
+      return;
+    }
+    if (selectedDests.some((d) => d.toLowerCase() === trimmed.toLowerCase())) {
+      setNewPlaceInput('');
+      return;
+    }
+    setCustomPlaces((prev) => [...prev, trimmed]);
+    setNewPlaceInput('');
+  };
+
+  const handleRemovePlace = (placeToRemove: string) => {
+    setCustomPlaces((prev) => prev.filter((p) => p !== placeToRemove));
+  };
+
   const handleSendWhatsApp = () => {
-    const destList = selectedDests.length > 0 ? selectedDests.join(', ') : 'Munnar, Thekkady, Alleppey';
+    if (!guestName.trim()) {
+      setValidationError('Please provide your Name so we can personalize your itinerary.');
+      return;
+    }
+    if (!guestPhone.trim()) {
+      setValidationError('Please provide your WhatsApp or Phone number to receive the proposal.');
+      return;
+    }
+    setValidationError(null);
+
+    const allPlaces = [...selectedDests, ...customPlaces];
+    const destList = allPlaces.length > 0 ? allPlaces.join(', ') : 'Munnar, Thekkady, Alleppey';
     const extras: string[] = [];
     if (houseboat) extras.push('Private Houseboat Stay');
     if (spiceTour) extras.push('Spice Plantation Tour');
     if (jeepSafari) extras.push('Off-road Jeep Safari');
 
     const msg = [
-      'Hello Travel Care Tours! I calculated a custom Kerala trip plan:',
+      'Hello Travel Care Tours! I calculated a custom Kerala holiday plan:',
       '',
+      `• Guest Name: ${guestName.trim()}`,
+      `• WhatsApp / Phone: ${guestPhone.trim()}`,
+      travelMonth.trim() ? `• Travel Month / Dates: ${travelMonth.trim()}` : '',
       `• Duration: ${nights} Nights / ${nights + 1} Days`,
       `• Guests: ${adults} Adult(s)${children > 0 ? `, ${children} Child(ren)` : ''}`,
+      selectedPackageTitle && selectedPackageTitle !== 'Not decided yet' ? `• Package Theme: ${selectedPackageTitle}` : '',
       `• Selected Destinations: ${destList}`,
       `• Resort Category: ${hotelTier}`,
       `• Private Transport: ${vehicle}`,
-      extras.length > 0 ? `• Inclusions/Experiences: ${extras.join(', ')}` : '',
+      extras.length > 0 ? `• Inclusions / Activities: ${extras.join(', ')}` : '',
+      specialNote.trim() ? `• Special Notes: ${specialNote.trim()}` : '',
       '',
       'Please send me the day-wise itinerary proposal and best price quote. Thank you!'
     ].filter(Boolean).join('\n');
@@ -68,11 +119,13 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     window.open(url, '_blank');
   };
 
+  const allSelectedCount = selectedDests.length + customPlaces.length;
+
   return (
-    <section id="trip-planner" className="py-20 md:py-28 bg-gradient-to-b from-white to-slate-50 border-t border-slate-200">
+    <section id="trip-planner" className="py-16 md:py-24 bg-gradient-to-b from-white to-slate-50 border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-2.5">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-green/10 text-brand-green text-xs font-bold uppercase tracking-wider">
             <Calculator className="w-3.5 h-3.5" />
             <span>INSTANT TRIP PLANNER</span>
@@ -81,7 +134,7 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
             Design Your Ideal Kerala Holiday
           </h2>
           <p className="text-slate-600 text-sm sm:text-base">
-            Customize destinations, duration, resort category, and vehicle to instantly format a proposal for our local team on WhatsApp.
+            Customize destinations, duration, resort category, vehicle, and your contact details to instantly receive a personalized itinerary on WhatsApp.
           </p>
         </div>
 
@@ -90,17 +143,19 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             {/* Left Options Controls */}
             <div className="lg:col-span-8 space-y-8">
-              {/* 1. Destinations selector */}
+              {/* 1. Destinations selector + Custom Places Input */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center justify-between">
-                  <span className="flex items-center gap-2">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-brand-green" />
                     <span>1. Choose Kerala Destinations</span>
-                  </span>
+                  </label>
                   <span className="text-xs text-brand-green font-semibold">
-                    {selectedDests.length} selected
+                    {allSelectedCount} place{allSelectedCount === 1 ? '' : 's'} included
                   </span>
-                </label>
+                </div>
+
+                {/* Major Kerala Destination Badges */}
                 <div className="flex flex-wrap gap-2">
                   {DESTINATIONS.map((d) => {
                     const isPicked = selectedDests.includes(d.name);
@@ -121,11 +176,61 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                     );
                   })}
                 </div>
-                {selectedDests.length === 0 && (
-                  <p className="text-xs text-slate-500 mt-2 italic">
-                    Tip: Tap one or more destinations above (e.g. Munnar, Thekkady, Alleppey)
-                  </p>
-                )}
+
+                {/* Space to Add Custom Places / Offbeat Stops */}
+                <div className="mt-4 pt-3.5 border-t border-slate-100 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-700">
+                      Add More Places or Offbeat Stops:
+                    </label>
+                    <span className="text-[11px] text-slate-400">e.g. Kumarakom, Jatayu Rock, Marari, Bekal</span>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newPlaceInput}
+                      onChange={(e) => setNewPlaceInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddPlace();
+                        }
+                      }}
+                      placeholder="Type a town, beach, or attraction..."
+                      className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:border-brand-green focus:ring-1 focus:ring-brand-green"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddPlace}
+                      className="px-4 py-2.5 rounded-xl bg-brand-navy hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-brand-green-soft" />
+                      <span>Add Place</span>
+                    </button>
+                  </div>
+
+                  {customPlaces.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1.5">
+                      {customPlaces.map((place) => (
+                        <span
+                          key={place}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-950 border border-emerald-200 text-xs font-semibold shadow-2xs"
+                        >
+                          <span>{place}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePlace(place)}
+                            className="text-emerald-700 hover:text-rose-600 font-bold ml-0.5 p-0.5 rounded-full hover:bg-emerald-100 transition-colors cursor-pointer"
+                            aria-label={`Remove ${place}`}
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* 2. Duration & Guest count */}
@@ -281,6 +386,106 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                   </label>
                 </div>
               </div>
+
+              {/* 5. Required Guest Information */}
+              <div className="pt-4 border-t border-slate-100 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    <User className="w-4 h-4 text-brand-green" />
+                    <span>5. Your Contact Information (Required for Itinerary)</span>
+                  </label>
+                  <span className="text-[11px] text-slate-400 font-medium">Direct WhatsApp Quote</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Your Full Name <span className="text-rose-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="e.g. Rahul Sharma"
+                        value={guestName}
+                        onChange={(e) => {
+                          setGuestName(e.target.value);
+                          if (validationError) setValidationError(null);
+                        }}
+                        className={`w-full pl-9 pr-3.5 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
+                          validationError && !guestName.trim()
+                            ? 'border-rose-400 bg-rose-50/40 focus:ring-rose-400'
+                            : 'border-slate-200 bg-white focus:border-brand-green focus:ring-brand-green'
+                        }`}
+                      />
+                      <User className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Phone / WhatsApp Number <span className="text-rose-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        placeholder="e.g. +91 98765 43210"
+                        value={guestPhone}
+                        onChange={(e) => {
+                          setGuestPhone(e.target.value);
+                          if (validationError) setValidationError(null);
+                        }}
+                        className={`w-full pl-9 pr-3.5 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
+                          validationError && !guestPhone.trim()
+                            ? 'border-rose-400 bg-rose-50/40 focus:ring-rose-400'
+                            : 'border-slate-200 bg-white focus:border-brand-green focus:ring-brand-green'
+                        }`}
+                      />
+                      <Phone className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Travel Month / Dates (Optional)
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="e.g. October 2025 / Diwali week"
+                        value={travelMonth}
+                        onChange={(e) => setTravelMonth(e.target.value)}
+                        className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium focus:border-brand-green focus:ring-brand-green"
+                      />
+                      <CalendarDays className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                      Special Requests / Airport Pickup (Optional)
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="e.g. Cochin Airport pickup, veg food"
+                        value={specialNote}
+                        onChange={(e) => setSpecialNote(e.target.value)}
+                        className="w-full pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium focus:border-brand-green focus:ring-brand-green"
+                      />
+                      <FileText className="w-4 h-4 text-slate-400 absolute left-3 top-3 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
+                {validationError && (
+                  <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs font-semibold text-rose-700 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+                    <span>{validationError}</span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Right Summary Box */}
@@ -294,6 +499,18 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                 </div>
 
                 <div className="space-y-2 text-xs sm:text-sm text-slate-700">
+                  {guestName.trim() && (
+                    <div className="flex justify-between py-1 border-b border-slate-200/60 pb-1.5">
+                      <span className="text-slate-500">Guest:</span>
+                      <span className="font-bold text-slate-900 truncate max-w-[170px]">{guestName.trim()}</span>
+                    </div>
+                  )}
+                  {guestPhone.trim() && (
+                    <div className="flex justify-between py-1 border-b border-slate-200/60 pb-1.5">
+                      <span className="text-slate-500">Phone:</span>
+                      <span className="font-bold text-slate-900">{guestPhone.trim()}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between py-1">
                     <span className="text-slate-500">Duration:</span>
                     <span className="font-bold text-slate-900">{nights} Nights / {nights + 1} Days</span>
@@ -304,8 +521,10 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                   </div>
                   <div className="flex justify-between py-1">
                     <span className="text-slate-500">Destinations:</span>
-                    <span className="font-bold text-slate-900 text-right">
-                      {selectedDests.length > 0 ? selectedDests.join(', ') : 'Popular Highlights'}
+                    <span className="font-bold text-slate-900 text-right max-w-[180px] truncate" title={[...selectedDests, ...customPlaces].join(', ')}>
+                      {[...selectedDests, ...customPlaces].length > 0
+                        ? [...selectedDests, ...customPlaces].join(', ')
+                        : 'Popular Highlights'}
                     </span>
                   </div>
                   <div className="flex justify-between py-1">
@@ -324,41 +543,24 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                     <span>Guaranteed Inclusions</span>
                   </div>
                   <p className="text-slate-500 text-[11px]">
-                    Daily Breakfast • Private Cab & Chauffeur • Tolls & Parking • 24/7 WhatsApp Coordination
+                    Daily Breakfast • Private Cab & Chauffeur • Tolls & Parking • 16/7 WhatsApp Coordination
                   </p>
                 </div>
               </div>
 
+              {/* Single, Perfectly Fitted Action Button */}
               <div className="space-y-3 pt-4 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={handleSendWhatsApp}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover shadow-lg shadow-brand-green/25 hover:scale-[1.02] transition-all cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-sm font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-lg shadow-[#25D366]/25 hover:scale-[1.01] transition-all cursor-pointer whitespace-nowrap"
                 >
-                  <MessageCircle className="w-4 h-4 fill-white" />
-                  <span>Send to WhatsApp for Quote →</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    onSendToEnquiry({
-                      nights,
-                      adults,
-                      children,
-                      destinations: selectedDests,
-                      hotelTier,
-                      vehicle,
-                      houseboat,
-                    });
-                  }}
-                  className="w-full py-2.5 rounded-full text-xs font-bold text-brand-navy bg-white hover:bg-slate-100 border border-slate-300 transition-colors cursor-pointer"
-                >
-                  Use in Online Form Below
+                  <WhatsAppIcon variant="white" className="w-5 h-5 fill-white shrink-0" />
+                  <span className="truncate">Get WhatsApp Quote</span>
                 </button>
 
                 <p className="text-[11px] text-center text-slate-500">
-                  No payment required now. Custom quote generated in minutes.
+                  No payment required. Custom itinerary quote sent to your WhatsApp in minutes.
                 </p>
               </div>
             </div>

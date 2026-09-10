@@ -1,7 +1,8 @@
 import React from 'react';
-import { Clock, MapPin, ArrowRight, MessageCircle, FileText, CheckCircle2 } from 'lucide-react';
+import { Clock, MapPin, ArrowRight, FileText, CheckCircle2 } from 'lucide-react';
 import { TourPackage } from '../types';
 import { COMPANY_DETAILS } from '../data/travelData';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface PackageCardProps {
   pkg: TourPackage;
@@ -97,9 +98,9 @@ export const PackageCard: React.FC<PackageCardProps> = ({
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-green hover:bg-brand-green-hover shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-xs transition-all cursor-pointer"
             >
-              <MessageCircle className="w-3.5 h-3.5 fill-white" />
+              <WhatsAppIcon variant="white" className="w-3.5 h-3.5 fill-white" />
               <span>WhatsApp</span>
             </a>
           </div>

@@ -1,7 +1,8 @@
 import React from 'react';
-import { X, Calendar, MapPin, CheckCircle2, MessageCircle, Clock, Utensils, BedDouble, Car } from 'lucide-react';
+import { X, Calendar, MapPin, CheckCircle2, Clock, Utensils, BedDouble, Car } from 'lucide-react';
 import { TourPackage } from '../types';
 import { COMPANY_DETAILS } from '../data/travelData';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface ItineraryModalProps {
   pkg: TourPackage | null;
@@ -168,9 +169,9 @@ export const ItineraryModal: React.FC<ItineraryModalProps> = ({ pkg, onClose, on
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover shadow-md shadow-brand-green/20 transition-all hover:scale-105 cursor-pointer"
+              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-md shadow-[#25D366]/25 transition-all hover:scale-105 cursor-pointer"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
+              <WhatsAppIcon variant="white" className="w-4 h-4 fill-white" />
               <span>Get Quote on WhatsApp</span>
             </a>
           </div>

@@ -25,7 +25,7 @@ export const PackagesSection: React.FC<PackagesSectionProps> = ({
       : TOUR_PACKAGES.filter((p) => p.category.toLowerCase() === activeCategory.toLowerCase());
 
   return (
-    <section id="packages" className="py-20 md:py-28 bg-slate-50 border-t border-slate-200/60">
+    <section id="packages" className="pt-16 pb-8 sm:pt-20 sm:pb-10 bg-slate-50 border-t border-slate-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">

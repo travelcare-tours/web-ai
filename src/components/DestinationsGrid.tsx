@@ -12,10 +12,10 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
   selectedDestinations = [],
 }) => {
   return (
-    <section id="destinations" className="py-20 md:py-28 bg-white">
+    <section id="destinations" className="pt-8 pb-16 sm:pt-10 sm:pb-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10 space-y-2">
           <span className="text-xs font-extrabold tracking-widest text-brand-green uppercase">
             EXPLORE KERALA
           </span>

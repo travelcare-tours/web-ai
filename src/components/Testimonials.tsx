@@ -1,8 +1,31 @@
 import React from 'react';
-import { Star, Quote, MapPin } from 'lucide-react';
+import { Star, StarHalf, Quote, MapPin } from 'lucide-react';
 import { TESTIMONIALS } from '../data/travelData';
 
 export const Testimonials: React.FC = () => {
+  const renderStars = (rating: number) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(
+          <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+        );
+      } else if (rating >= i - 0.5) {
+        stars.push(
+          <span key={i} className="relative inline-flex items-center justify-center w-4 h-4">
+            <Star className="w-4 h-4 text-slate-200 fill-slate-200 absolute inset-0" />
+            <StarHalf className="w-4 h-4 fill-amber-400 text-amber-400 absolute inset-0 z-10" />
+          </span>
+        );
+      } else {
+        stars.push(
+          <Star key={i} className="w-4 h-4 text-slate-200 fill-slate-200" />
+        );
+      }
+    }
+    return stars;
+  };
+
   return (
     <section className="py-20 md:py-28 bg-white border-t border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,10 +52,13 @@ export const Testimonials: React.FC = () => {
               <div className="space-y-4">
                 {/* Top rating stars & quote icon */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    ))}
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-0.5">
+                      {renderStars(review.rating)}
+                    </div>
+                    <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60 ml-1">
+                      {review.rating.toFixed(1)} / 5.0
+                    </span>
                   </div>
                   <Quote className="w-8 h-8 text-slate-300" />
                 </div>

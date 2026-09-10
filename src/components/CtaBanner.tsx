@@ -1,6 +1,7 @@
 import React from 'react';
-import { ArrowRight, MessageCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { COMPANY_DETAILS } from '../data/travelData';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface CtaBannerProps {
   onPlanTripClick: () => void;
@@ -40,9 +41,9 @@ export const CtaBanner: React.FC<CtaBannerProps> = ({ onPlanTripClick }) => {
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-4 rounded-full text-sm font-bold bg-brand-green text-white hover:bg-brand-green-hover shadow-lg shadow-brand-green/20 transition-all hover:scale-105"
+              className="inline-flex items-center gap-2.5 px-6 py-4 rounded-full text-sm font-bold bg-[#25D366] text-white hover:bg-[#20bd5a] shadow-lg shadow-[#25D366]/25 transition-all hover:scale-105"
             >
-              <MessageCircle className="w-4 h-4 fill-white" />
+              <WhatsAppIcon variant="white" className="w-4 h-4 fill-white" />
               <span>Chat on WhatsApp</span>
             </a>
           </div>
