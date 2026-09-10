@@ -1,0 +1,6 @@
+{
+  "name": "Travel Care Tours",
+  "description": "Travel Care Tours Pvt Ltd - Tailored Kerala tour packages, family vacations, honeymoon getaways, backwater houseboats, and customized holidays.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

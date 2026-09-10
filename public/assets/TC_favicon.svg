@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <linearGradient id="greenHandGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#145a27"/>
+      <stop offset="50%" stop-color="#238a38"/>
+      <stop offset="100%" stop-color="#3eb052"/>
+    </linearGradient>
+    <linearGradient id="globeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e78ba"/>
+      <stop offset="100%" stop-color="#0a4b82"/>
+    </linearGradient>
+    <linearGradient id="tGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#072b54"/>
+      <stop offset="100%" stop-color="#0c3566"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Circular Outer Navy Swoop Arc -->
+  <path d="M 230 80 C 130 85 45 165 42 270 C 40 330 65 385 110 420 C 102 410 98 395 98 380 C 65 340 60 270 78 215 C 100 150 160 98 230 80 Z" fill="#072b54" />
+  <path d="M 190 75 C 275 62 360 95 408 160 C 375 140 330 130 280 135 C 330 115 375 125 410 152 C 400 138 385 122 365 108 C 315 72 245 65 190 75 Z" fill="#072b54" />
+
+  <!-- Bird Flying Upward to Top Right -->
+  <g transform="translate(390, 70) scale(0.95)" fill="#072b54">
+    <!-- Body and head -->
+    <path d="M 15 45 C 22 38 35 28 48 20 C 56 16 65 16 70 20 C 72 23 70 25 66 26 C 60 28 50 34 45 42 C 40 48 38 56 36 68 C 30 62 22 55 15 45 Z" />
+    <!-- Beak -->
+    <polygon points="70,20 76,21 72,24" />
+    <!-- Upward Wings -->
+    <path d="M 38 38 C 32 20 25 2 3 -12 C 0 -15 -2 -14 0 -11 C 6 -1 12 12 16 28 C 12 20 8 10 3 0 C 0 -3 -2 -2 0 1 C 5 10 10 22 14 34 C 18 30 24 25 32 20 Z" />
+    <path d="M 25 36 C 20 22 12 8 -4 -2 C -7 -5 -8 -4 -6 -1 C -1 7 5 17 10 28 C 6 22 2 15 -3 7 C -6 4 -7 5 -5 8 C 1 18 7 28 12 36 Z" />
+    <!-- Tail Feathers -->
+    <path d="M 36 68 C 42 66 52 64 62 60 C 52 68 45 78 40 88 C 38 82 37 75 36 68 Z" />
+  </g>
+
+  <!-- Flight trail connecting T to bird -->
+  <path d="M 250 165 C 290 160 340 145 395 110 C 350 135 305 150 255 155 Z" fill="#072b54" />
+
+  <!-- Center Stylized 'T' -->
+  <!-- Top bar of T with swoop -->
+  <path d="M 115 220 C 130 195 170 165 245 158 C 320 150 375 125 415 95 C 380 130 330 162 250 172 C 190 178 150 195 115 220 Z" fill="url(#tGrad)" />
+  <!-- Stem of T curving down -->
+  <path d="M 215 175 C 235 220 238 290 225 350 C 215 395 185 415 142 418 C 160 415 180 400 188 375 C 198 330 196 260 178 190 C 190 184 202 179 215 175 Z" fill="url(#tGrad)" />
+
+  <!-- Suitcase on the lower-left -->
+  <g transform="translate(112, 305)" fill="#072b54">
+    <!-- Handle -->
+    <path d="M 22 0 C 22 -8 38 -8 38 0 L 38 8 L 22 8 Z" fill="none" stroke="#072b54" stroke-width="4.5" stroke-linejoin="round" />
+    <!-- Main Body -->
+    <rect x="10" y="8" width="40" height="60" rx="8" fill="#072b54" />
+    <!-- Grooves on suitcase -->
+    <rect x="17" y="16" width="5" height="42" rx="2.5" fill="#ffffff" opacity="0.9" />
+    <rect x="27.5" y="16" width="5" height="42" rx="2.5" fill="#ffffff" opacity="0.9" />
+    <rect x="38" y="16" width="5" height="42" rx="2.5" fill="#ffffff" opacity="0.9" />
+    <!-- Wheels -->
+    <circle cx="18" cy="71" r="3.5" fill="#072b54" />
+    <circle cx="42" cy="71" r="3.5" fill="#072b54" />
+  </g>
+
+  <!-- Globe in Palm -->
+  <g transform="translate(255, 255)">
+    <!-- Globe ocean circle -->
+    <circle cx="55" cy="55" r="55" fill="url(#globeGrad)" />
+    <!-- Continents in white -->
+    <path d="M 35 20 C 45 15 55 18 62 25 C 68 32 62 42 55 45 C 50 48 45 42 42 35 C 38 30 30 28 35 20 Z" fill="#ffffff" />
+    <path d="M 68 30 C 78 28 88 32 95 40 C 98 46 95 55 88 58 C 82 60 76 52 72 45 C 70 38 65 34 68 30 Z" fill="#ffffff" />
+    <path d="M 22 45 C 28 42 36 46 38 52 C 40 60 34 68 28 72 C 22 75 16 68 18 58 C 19 50 18 48 22 45 Z" fill="#ffffff" />
+    <path d="M 42 62 C 50 60 62 65 65 72 C 68 80 62 90 54 95 C 46 98 38 90 40 80 C 41 72 38 66 42 62 Z" fill="#ffffff" />
+    <path d="M 72 65 C 80 62 92 68 95 78 C 96 85 90 92 82 94 C 76 95 70 88 71 80 C 72 74 68 68 72 65 Z" fill="#ffffff" />
+  </g>
+
+  <!-- Green Caring Open Hand Holding Globe and Framing Base -->
+  <path d="M 125 410 C 145 418 190 422 230 428 C 280 435 340 430 388 385 C 430 340 450 270 445 200 C 445 175 435 150 425 135 C 428 155 435 185 432 215 C 425 285 395 355 340 395 C 295 428 235 435 180 425 C 160 422 140 417 125 410 Z" fill="url(#greenHandGrad)" />
+  <!-- Hand Palm & Thumb cradling globe -->
+  <path d="M 175 420 C 220 400 270 375 320 345 C 335 336 350 330 365 338 C 378 345 375 362 360 375 C 325 405 270 428 215 440 C 185 445 150 440 130 426 C 145 423 162 422 175 420 Z" fill="url(#greenHandGrad)" />
+  <path d="M 235 385 C 265 372 295 352 325 330 C 315 345 295 365 270 382 C 255 392 242 392 235 385 Z" fill="#1b6e2d" opacity="0.6" />
+</svg>
