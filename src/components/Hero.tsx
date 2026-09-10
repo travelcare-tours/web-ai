@@ -27,22 +27,22 @@ const HERO_BACKGROUND_SLIDES = [
   {
     title: "Kovalam",
     subtitle: "Golden Sands & Iconic Lighthouse Coast",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=2000&q=85",
+    image: "https://images.unsplash.com/photo-1576748135861-f254c1582530?auto=format&fit=crop&w=2000&q=85",
   },
   {
     title: "Thekkady",
     subtitle: "Periyar Wildlife Reserve & Spice Groves",
-    image: "https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=2000&q=85",
+    image: "https://thekkady.org/wp-content/uploads/2025/04/kalari3.jpg?auto=format&fit=crop&w=2000&q=85",
   },
   {
-    title: "Wayanad",
+    title: "Varkala",
     subtitle: "Misty Rainforests, Waterfalls & Treks",
-    image: "https://images.unsplash.com/photo-1588665555327-a67c73b3cc23?auto=format&fit=crop&w=2000&q=85",
+    image: "https://www.karthitravels.com/images/destinations/varkala.jpg?auto=format&fit=crop&w=2000&q=85",
   },
   {
     title: "Kochi",
     subtitle: "Historic Fort Cochin & Chinese Fishing Nets",
-    image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=2000&q=85",
+    image: "https://cdn.londonerinsydney.com/wp-content/uploads/2018/04/12161231/places-to-visit-in-fort-kochi.jpg?auto=format&fit=crop&w=2000&q=85",
   },
 ];
 
@@ -109,9 +109,9 @@ export const Hero: React.FC<HeroProps> = ({
           );
         })}
 
-        {/* Cinematic overlays for crisp text legibility */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-r from-brand-navy-deep/95 via-brand-navy-dark/80 to-brand-navy-deep/55" />
-        <div className="absolute inset-0 z-20 bg-gradient-to-t from-brand-navy-deep/90 via-transparent to-black/40" />
+        {/* Subtle cinematic overlays for crisp text legibility on left while keeping right-side imagery bright & visible */}
+        <div className="absolute inset-0 z-20 bg-gradient-to-r from-brand-navy-deep/90 via-brand-navy-deep/35 sm:via-brand-navy-deep/20 to-transparent" />
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-brand-navy-deep/70 via-transparent to-black/20" />
       </div>
 
       {/* Main Hero Content (Vertically Centered) */}
@@ -124,13 +124,13 @@ export const Hero: React.FC<HeroProps> = ({
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold font-display tracking-tight leading-[1.08] text-white drop-shadow-sm">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold font-display tracking-tight leading-[1.08] text-white drop-shadow-md">
             Discover Kerala. <br />
             <span className="text-brand-green-soft">Travel with care.</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base lg:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl drop-shadow-xs">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-100 font-normal leading-relaxed max-w-2xl drop-shadow-sm">
             Misty tea hills of Munnar, tranquil backwater houseboats in Alleppey, and sun-kissed beaches in Kovalam — crafted into personalized, unforgettable holidays.
           </p>
 

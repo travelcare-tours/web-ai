@@ -20,7 +20,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Tea gardens & misty mountains",
     tagline: "The Kashmir of South India",
     category: "Hill Station",
-    image: "https://images.unsplash.com/photo-1742106854691-014b06968f74?auto=format&fit=crop&w=1200&q=85",
+    image: "https://www.thefogmunnar.com/images/munnar-banner-mob.webp?auto=format&fit=crop&w=1200&q=85",
     description: "Perched at 1,600 meters above sea level, Munnar features rolling emerald tea plantations, cool mountain breeze, cascading waterfalls, and the rare Nilgiri Tahr.",
     keyAttractions: ["Tea Museum & Estates", "Eravikulam National Park", "Mattupetty Dam", "Top Station & Echo Point", "Attukad Waterfalls"],
     bestTime: "September to May"
@@ -31,7 +31,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Wildlife, forest & spice country",
     tagline: "Periyar Tiger Reserve & Spices",
     category: "Wildlife & Nature",
-    image: "https://images.unsplash.com/photo-1716404985743-8c0e007cb358?auto=format&fit=crop&w=1200&q=85",
+    image: "https://thekkady.org/wp-content/uploads/2025/04/elephant-safari-thekkady-1024x640.jpg?auto=format&fit=crop&w=1200&q=85",
     description: "Home to India's most fascinating natural wildlife sanctuary, Periyar Lake boat safari, aromatic spice gardens, and martial arts (Kalaripayattu) performances.",
     keyAttractions: ["Periyar Wildlife Boat Safari", "Spice Plantation Walk", "Elephant Junction", "Kalaripayattu & Kathakali Show", "Bamboo Rafting"],
     bestTime: "October to April"
@@ -42,7 +42,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Backwaters & houseboat cruises",
     tagline: "The Venice of the East",
     category: "Backwaters",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=85",
+    image: "https://lostwithpurpose.com/wp-content/uploads/2016/12/DSC_3368.jpg?auto=format&fit=crop&w=1200&q=85",
     description: "Glide through tranquil palm-fringed canals, emerald paddy fields, and serene lagoons aboard a traditional thatch-roof Kerala houseboat with authentic onboard meals.",
     keyAttractions: ["Private Houseboat Cruise", "Vembanad Lake", "Alappuzha Beach & Lighthouse", "Canoe Village Tours", "Marari Beach"],
     bestTime: "Year Round (Winter Best)"
@@ -53,7 +53,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Beach, lighthouse & relaxation",
     tagline: "Golden Crescent Beaches",
     category: "Beaches",
-    image: "https://images.unsplash.com/photo-1576748135861-f254c1582530?auto=format&fit=crop&w=1200&q=85",
+    image: "https://images.trvl-media.com/place/6053347/c20151bd-9cba-4257-b8b0-0ea3163f0459.jpg?auto=format&fit=crop&w=1200&q=85",
     description: "Famous for its red-and-white striped lighthouse, gentle waves, Ayurvedic rejuvenation therapies, fresh seafood beachside dining, and golden sands.",
     keyAttractions: ["Lighthouse Beach", "Hawa Beach & Samudra Beach", "Ayurvedic Massages", "Vizhinjam Marine Aquarium", "Sunset Promenade"],
     bestTime: "October to March"
@@ -64,7 +64,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Cliffs, palms & Arabian Sea views",
     tagline: "Majestic Cliffs & Sacred Springs",
     category: "Coastal Cliffs",
-    image: "https://images.unsplash.com/photo-1660314159014-79d411e1c53d?auto=format&fit=crop&w=1200&q=85",
+    image: "https://images.trvl-media.com/place/6104784/594a64e9-f895-4633-8959-43902aeda026.jpg?auto=format&fit=crop&w=1200&q=85",
     description: "Striking red laterite cliffs bordering the Arabian Sea, bohemian cliff-top cafés, stunning sunset panoramic viewpoints, and the spiritual Janardhanaswamy Temple.",
     keyAttractions: ["North Cliff Promenade", "Papanasam Sacred Beach", "Black Sand Beach", "Cliffside Cafes", "Janardhana Swamy Temple"],
     bestTime: "October to April"
@@ -75,7 +75,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Fort Kochi & Chinese fishing nets",
     tagline: "Queen of the Arabian Sea",
     category: "Heritage & Culture",
-    image: "https://images.unsplash.com/photo-1783100021835-c64c323b63dc?auto=format&fit=crop&w=1200&q=85",
+    image: "https://assets.cntraveller.in/photos/6780dce9687bfbbf08fb402e/3:2/w_4977,h_3318,c_limit/GettyImages-2171354215.jpg?auto=format&fit=crop&w=1200&q=85",
     description: "A fascinating blend of Portuguese, Dutch, British, and Jewish heritage with cantilevered Chinese fishing nets, boutique art cafes, spice markets, and harbor cruises.",
     keyAttractions: ["Chinese Fishing Nets", "Fort Kochi Colonial Streets", "Mattancherry Dutch Palace", "Jew Town & Synagogue", "Marine Drive Boating"],
     bestTime: "October to April"
@@ -86,7 +86,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Green hills & outdoor adventures",
     tagline: "Untouched Highland Paradise",
     category: "Offbeat Hills",
-    image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85",
+    image: "https://www.capturedayz.com/assets/img/Gallery/img8.jpg?auto=format&fit=crop&w=1200&q=85",
     description: "A tranquil highland haven free from commercial crowds, surrounded by pine forests, misty green meadows, tea valleys, and thrilling off-road jeep trails.",
     keyAttractions: ["Vagamon Pine Forest", "Vagamon Kurisumala", "Green Meadows (Vagamon Lake)", "Marmala Waterfalls", "Off-Road Jeep Safari"],
     bestTime: "September to May"
@@ -114,7 +114,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
     nights: 5,
     days: 6,
     route: ["Cochin", "Munnar (2N)", "Thekkady (1N)", "Alleppey Houseboat (1N)", "Cochin (1N)"],
-    image: "https://images.unsplash.com/photo-1742106854691-014b06968f74?auto=format&fit=crop&w=900&q=85",
+    image: "https://img.traveltriangle.com/apac/attachments/pictures/842404/original/romantic-dinner_kerala_houseboat.jpg?auto=format&fit=crop&w=900&q=85",
     priceNote: "Customized quote based on resort choice",
     highlights: [
       "Romantic candlelit dinner & flower bed decoration",
@@ -178,7 +178,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
     nights: 6,
     days: 7,
     route: ["Cochin", "Munnar (2N)", "Thekkady (1N)", "Alleppey (1N)", "Kovalam (2N)", "Trivandrum"],
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=900&q=85",
+    image: "https://www.tusktravel.com/blog/wp-content/uploads/2022/10/How-to-Plan-a-Family-Holiday-in-Kerala.jpg?auto=format&fit=crop&w=900&q=85",
     priceNote: "Tailored for families with kids and seniors",
     highlights: [
       "Relaxed driving pace with family-friendly resort stays",
@@ -324,7 +324,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
     nights: 4,
     days: 5,
     route: ["Cochin", "Vagamon (2N)", "Munnar (2N)", "Cochin"],
-    image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85",
+    image: "https://content.r9cdn.net/rimg/dimg/a9/dd/d6b29241-city-44818-166a7453734.jpg?auto=format&fit=crop&w=900&q=85",
     priceNote: "Special group pricing for friends & corporate teams",
     highlights: [
       "Thrilling 4x4 off-road jeep safari to Vagamon hilltops",
