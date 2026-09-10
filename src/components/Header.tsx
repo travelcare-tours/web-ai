@@ -15,6 +15,8 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
     return `https://wa.me/${COMPANY_DETAILS.whatsappNumber}?text=${text}`;
   };
 
+  const headerLogoSrc = `${(import.meta.env.BASE_URL || './').replace(/\/$/, '')}/assets/TC_logo_horizontal.png`;
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all">
       {/* Main Navbar */}
@@ -23,13 +25,21 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
           {/* Logo */}
           <a href="#home" className="flex items-center gap-3 group focus:outline-hidden py-1.5" aria-label="Travel Care Tours Home">
             <img
-              src="public/assets/TC_logo_horizontal.png"
+              src={headerLogoSrc}
               alt="Travel Care Tours"
               className="h-12 sm:h-14 md:h-16 w-auto max-h-18 object-contain transition-transform group-hover:scale-[1.02]"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                if (!target.src.includes('assets/TC_logo_horizontal.png')) {
-                  target.src = './assets/TC_logo_horizontal.png';
+                const step = Number(target.dataset.fallbackStep || '0');
+                if (step === 0) {
+                  target.dataset.fallbackStep = '1';
+                  target.src = './TC_logo_horizontal.png';
+                } else if (step === 1) {
+                  target.dataset.fallbackStep = '2';
+                  target.src = 'TC_logo_horizontal.png';
+                } else if (step === 2) {
+                  target.dataset.fallbackStep = '3';
+                  target.src = 'assets/TC_logo_horizontal.png';
                 }
               }}
             />

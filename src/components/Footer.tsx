@@ -17,13 +17,21 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-5 space-y-4">
             <div className="inline-block">
               <img
-                src="TC_logo_footer.png"
+                src={`${(import.meta.env.BASE_URL || './').replace(/\/$/, '')}/assets/TC_logo_footer.png`}
                 alt="Travel Care Tours"
                 className="h-20 sm:h-24 md:h-26 w-auto max-h-32 object-contain"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  if (!target.src.includes('assets/TC_logo_footer.png')) {
-                    target.src = './assets/TC_logo_footer.png';
+                  const step = Number(target.dataset.fallbackStep || '0');
+                  if (step === 0) {
+                    target.dataset.fallbackStep = '1';
+                    target.src = './TC_logo_footer.png';
+                  } else if (step === 1) {
+                    target.dataset.fallbackStep = '2';
+                    target.src = 'TC_logo_footer.png';
+                  } else if (step === 2) {
+                    target.dataset.fallbackStep = '3';
+                    target.src = 'assets/TC_logo_footer.png';
                   }
                 }}
               />
