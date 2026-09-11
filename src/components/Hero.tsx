@@ -17,7 +17,7 @@ const HERO_BACKGROUND_SLIDES = [
   {
     title: "Kochi",
     subtitle: "Historic Fort Cochin & Chinese Fishing Nets",
-    image: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=2000&q=85",
+    image: "https://cdn.londonerinsydney.com/wp-content/uploads/2018/04/12161231/places-to-visit-in-fort-kochi.jpg?auto=format&fit=crop&w=2000&q=85",
   },
   {
     title: "Munnar",
