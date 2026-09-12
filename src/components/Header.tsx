@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 interface HeaderProps {
@@ -6,139 +6,277 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const headerLogoSrc = `${(import.meta.env.BASE_URL || './').replace(/\/$/, '')}/assets/TC_logo_horizontal.png`;
+  const baseUrl = (import.meta.env.BASE_URL || './').replace(/\/$/, '');
+  const horizontalLogoSrc = `${baseUrl}/assets/TC_logo_horizontal.png`;
+  const whiteLogoSrc = `${baseUrl}/assets/TC_logo_footer.png`;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Trigger floating nav when user scrolls past 80px
+      const scrolled = window.scrollY > 80;
+      setIsScrolled(scrolled);
+      if (!scrolled) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    sectionId: string
+  ) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs transition-all">
-      {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-[72px]">
-          {/* Logo */}
-          <a href="#home" className="flex items-center gap-2 group focus:outline-hidden py-1" aria-label="Travel Care Tours Home">
-            <img
-              src={headerLogoSrc}
-              alt="Travel Care Tours"
-              className="w-[180px] h-[51px] max-h-[51px] object-contain transition-transform group-hover:scale-[1.01]"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                const step = Number(target.dataset.fallbackStep || '0');
-                if (step === 0) {
-                  target.dataset.fallbackStep = '1';
-                  target.src = './TC_logo_horizontal.png';
-                } else if (step === 1) {
-                  target.dataset.fallbackStep = '2';
-                  target.src = 'TC_logo_horizontal.png';
-                } else if (step === 2) {
-                  target.dataset.fallbackStep = '3';
-                  target.src = 'assets/TC_logo_horizontal.png';
-                }
-              }}
-            />
+    <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-500">
+      <div
+        className={`mx-auto transition-all duration-500 ease-out pointer-events-auto ${
+          isScrolled
+            ? `mt-3 sm:mt-4 w-[calc(100%-1.5rem)] sm:w-[calc(100%-2.5rem)] max-w-5xl bg-white/95 backdrop-blur-md border border-solid border-slate-200/80 shadow-lg shadow-slate-900/10 ${
+                mobileMenuOpen
+                  ? 'rounded-[20px] sm:rounded-[28px]'
+                  : 'rounded-[18px] sm:rounded-[40px]'
+              } px-4 sm:px-6 py-2 sm:py-2`
+            : 'mt-0 w-full max-w-7xl bg-transparent border-transparent shadow-none px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6'
+        }`}
+      >
+        <div className="flex items-center justify-between">
+          {/* Logo with Smooth Cross-Fade Transition */}
+          <a
+            href="#home"
+            onClick={(e) => handleNavClick(e, 'home')}
+            className="flex items-center group focus:outline-hidden py-1"
+            aria-label="Travel Care Tours Home"
+          >
+            <div
+              className={`relative transition-all duration-500 flex items-center ${
+                isScrolled
+                  ? 'w-[140px] sm:w-[160px] h-[44px] sm:h-[48px]'
+                  : 'w-[180px] sm:w-[220px] h-[58px] sm:h-[70px]'
+              }`}
+            >
+              {/* Clean White Logo (Visible at Hero / Top state) */}
+              <img
+                src={whiteLogoSrc}
+                alt="Travel Care Tours"
+                className={`absolute inset-0 w-full h-full sm:w-[220px] sm:h-[70px] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] transition-all duration-500 ease-in-out ${
+                  isScrolled
+                    ? 'opacity-0 scale-95 pointer-events-none'
+                    : 'opacity-100 scale-100'
+                }`}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  const step = Number(target.dataset.fallbackStep || '0');
+                  if (step === 0) {
+                    target.dataset.fallbackStep = '1';
+                    target.src = './TC_logo_footer.png';
+                  } else if (step === 1) {
+                    target.dataset.fallbackStep = '2';
+                    target.src = 'TC_logo_footer.png';
+                  } else if (step === 2) {
+                    target.dataset.fallbackStep = '3';
+                    target.src = 'assets/TC_logo_footer.png';
+                  }
+                }}
+              />
+
+              {/* Colorful Horizontal Logo (Comes alive in Floating Nav) */}
+              <img
+                src={horizontalLogoSrc}
+                alt="Travel Care Tours"
+                className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-in-out ${
+                  isScrolled
+                    ? 'opacity-100 scale-100'
+                    : 'opacity-0 scale-95 pointer-events-none'
+                }`}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  const step = Number(target.dataset.fallbackStep || '0');
+                  if (step === 0) {
+                    target.dataset.fallbackStep = '1';
+                    target.src = './TC_logo_horizontal.png';
+                  } else if (step === 1) {
+                    target.dataset.fallbackStep = '2';
+                    target.src = 'TC_logo_horizontal.png';
+                  } else if (step === 2) {
+                    target.dataset.fallbackStep = '3';
+                    target.src = 'assets/TC_logo_horizontal.png';
+                  }
+                }}
+              />
+            </div>
           </a>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-xs sm:text-[13px] font-medium text-slate-700">
-            <a href="#home" className="hover:text-brand-green transition-colors py-1">
-              Home
-            </a>
-            <a href="#packages" className="hover:text-brand-green transition-colors py-1">
-              Packages
-            </a>
-            <a href="#destinations" className="hover:text-brand-green transition-colors py-1">
-              Destinations
-            </a>
-            <a href="#trip-planner" className="hover:text-brand-green transition-colors py-1">
-              Trip Planner
-            </a>
-            <a href="#why-us" className="hover:text-brand-green transition-colors py-1">
-              Why Us
-            </a>
-            <a href="#faqs" className="hover:text-brand-green transition-colors py-1">
-              FAQs
-            </a>
-          </nav>
-
-          {/* Desktop Plan Trip CTA */}
-          <div className="hidden md:flex items-center">
-            {onPlanTripClick && (
-              <button
-                onClick={onPlanTripClick}
-                className="px-4 py-1.5 rounded-full text-xs font-bold bg-brand-green hover:bg-brand-green-hover text-white shadow-xs transition-all hover:scale-[1.02] cursor-pointer"
-              >
-                Plan Trip
-              </button>
-            )}
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="flex md:hidden items-center">
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-700 hover:text-brand-navy hover:bg-slate-100 transition-colors cursor-pointer"
-              aria-expanded={mobileMenuOpen}
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-5 space-y-2 shadow-xl animate-fadeIn">
-          <nav className="flex flex-col space-y-1 text-sm font-semibold text-slate-800">
+          {/* Nav Links */}
+          <nav
+            className={`hidden md:flex items-center gap-5 lg:gap-7 text-[14px] font-medium transition-all duration-500 ${
+              isScrolled
+                ? 'opacity-100 translate-y-0 text-slate-700 pointer-events-auto'
+                : 'opacity-0 -translate-y-2 pointer-events-none'
+            }`}
+          >
             <a
               href="#home"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
+              onClick={(e) => handleNavClick(e, 'home')}
+              className="hidden lg:inline-block hover:text-brand-green transition-colors py-1"
             >
               Home
             </a>
             <a
               href="#packages"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
+              onClick={(e) => handleNavClick(e, 'packages')}
+              className="hover:text-brand-green transition-colors py-1 font-medium"
             >
-              Tour Packages
+              Packages
             </a>
             <a
               href="#destinations"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
+              onClick={(e) => handleNavClick(e, 'destinations')}
+              className="hover:text-brand-green transition-colors py-1 font-medium"
             >
-              Kerala Destinations
+              Destinations
             </a>
             <a
               href="#trip-planner"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onPlanTripClick?.();
-              }}
-              className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
+              onClick={(e) => handleNavClick(e, 'trip-planner')}
+              className="hidden lg:inline-block hover:text-brand-green transition-colors py-1 font-semibold text-brand-navy"
             >
               Trip Planner
             </a>
             <a
               href="#why-us"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
+              onClick={(e) => handleNavClick(e, 'why-us')}
+              className="hidden lg:inline-block hover:text-brand-green transition-colors py-1"
             >
-              Why Travel Care
+              Why Us
             </a>
             <a
               href="#faqs"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-100 hover:text-brand-green transition-colors"
+              onClick={(e) => handleNavClick(e, 'faqs')}
+              className="hidden lg:inline-block hover:text-brand-green transition-colors py-1"
             >
               FAQs
             </a>
           </nav>
+
+          {/* Right actions (Plan Trip & Menu toggle for Tablet/Mobile) */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Plan Trip Action */}
+            <div
+              className={`hidden sm:flex items-center transition-all duration-500 ${
+                isScrolled
+                  ? 'opacity-100 scale-100 pointer-events-auto'
+                  : 'opacity-0 scale-95 pointer-events-none w-0 overflow-hidden'
+              }`}
+            >
+              {onPlanTripClick && (
+                <button
+                  onClick={onPlanTripClick}
+                  className="w-[105px] sm:w-[110px] h-[36px] sm:h-[38px] flex items-center justify-center rounded-full text-[13px] font-bold border-2 border-brand-green text-brand-green bg-transparent hover:bg-brand-green hover:text-white shadow-xs transition-all hover:scale-[1.02] cursor-pointer"
+                >
+                  Plan Trip
+                </button>
+              )}
+            </div>
+
+            {/* Menu toggle button for Mobile & Tablet (hidden on desktop lg) */}
+            <div
+              className={`flex lg:hidden items-center transition-all duration-500 ${
+                isScrolled
+                  ? 'opacity-100 pointer-events-auto'
+                  : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-full text-slate-700 hover:text-brand-navy hover:bg-slate-100 transition-colors cursor-pointer"
+                aria-expanded={mobileMenuOpen}
+                aria-label="Toggle navigation menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
         </div>
-      )}
+
+        {/* Floating Dropdown Menu for Mobile & Tablet */}
+        {isScrolled && mobileMenuOpen && (
+          <div className="lg:hidden mt-3 pt-3 pb-2 border-t border-slate-200/80 space-y-1">
+            <nav className="flex flex-col space-y-1 text-sm font-semibold text-slate-800">
+              <a
+                href="#home"
+                onClick={(e) => handleNavClick(e, 'home')}
+                className="px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
+              >
+                Home
+              </a>
+              {/* Only show Packages & Destinations in dropdown on mobile where they aren't on the bar */}
+              <a
+                href="#packages"
+                onClick={(e) => handleNavClick(e, 'packages')}
+                className="md:hidden px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
+              >
+                Tour Packages
+              </a>
+              <a
+                href="#destinations"
+                onClick={(e) => handleNavClick(e, 'destinations')}
+                className="md:hidden px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
+              >
+                Kerala Destinations
+              </a>
+              <a
+                href="#trip-planner"
+                onClick={(e) => handleNavClick(e, 'trip-planner')}
+                className="px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
+              >
+                Trip Planner
+              </a>
+              <a
+                href="#why-us"
+                onClick={(e) => handleNavClick(e, 'why-us')}
+                className="px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
+              >
+                Why Travel Care
+              </a>
+              <a
+                href="#faqs"
+                onClick={(e) => handleNavClick(e, 'faqs')}
+                className="px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
+              >
+                FAQs
+              </a>
+              {/* On mobile, also provide a Plan Trip button inside dropdown */}
+              <div className="sm:hidden pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onPlanTripClick?.();
+                  }}
+                  className="w-full py-2.5 rounded-xl text-center text-sm font-bold border-2 border-brand-green text-brand-green bg-transparent hover:bg-brand-green hover:text-white transition-colors"
+                >
+                  Plan Trip
+                </button>
+              </div>
+            </nav>
+          </div>
+        )}
+      </div>
     </header>
   );
 };

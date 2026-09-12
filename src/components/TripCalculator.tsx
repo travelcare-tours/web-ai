@@ -15,10 +15,16 @@ import {
   AlertCircle,
   Plus,
   X,
+  CheckCircle2,
+  Copy,
+  Mail,
+  RotateCcw,
+  Loader2,
 } from 'lucide-react';
 import { DESTINATIONS, COMPANY_DETAILS } from '../data/travelData';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { submitTripEnquiry } from '../services/leadService';
+import { Toast } from './Toast';
 
 interface TripCalculatorProps {
   selectedDests: string[];
@@ -34,6 +40,7 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
   const [nights, setNights] = useState<number>(5);
   const [adults, setAdults] = useState<number>(2);
   const [children, setChildren] = useState<number>(0);
+  const [childAges, setChildAges] = useState<number[]>([]);
   const [hotelTier, setHotelTier] = useState<string>('Deluxe 4-Star');
   const [vehicle, setVehicle] = useState<string>('Private Sedan (Dzire / Etios)');
   const [houseboat, setHouseboat] = useState<boolean>(true);
@@ -51,6 +58,26 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
   const [specialNote, setSpecialNote] = useState<string>('');
   const [validationError, setValidationError] = useState<string | null>(null);
 
+  // Submission & Feedback State
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [lastWhatsAppUrl, setLastWhatsAppUrl] = useState<string>('');
+  const [lastMessageText, setLastMessageText] = useState<string>('');
+  const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [toast, setToast] = useState<{
+    isOpen: boolean;
+    type: 'success' | 'error' | 'info';
+    title: string;
+    message: string;
+    actionLabel?: string;
+    actionUrl?: string;
+  }>({
+    isOpen: false,
+    type: 'success',
+    title: '',
+    message: '',
+  });
+
   const handleAdultsChange = (val: number) => {
     const num = Math.max(1, val);
     setAdults(num);
@@ -60,6 +87,34 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     if (num + children > 7) {
       setVehicle('AC Tempo Traveller (12-17 Seater)');
     }
+  };
+
+  const handleChildrenChange = (val: number) => {
+    const count = Math.max(0, Math.min(8, val));
+    setChildren(count);
+    setChildAges((prev) => {
+      if (count > prev.length) {
+        // Default newly added child to 5 years
+        const diff = count - prev.length;
+        return [...prev, ...Array(diff).fill(5)];
+      } else {
+        return prev.slice(0, count);
+      }
+    });
+    if (adults + count > 4 && vehicle.includes('Sedan')) {
+      setVehicle('Private SUV (Toyota Innova Crysta)');
+    }
+    if (adults + count > 7) {
+      setVehicle('AC Tempo Traveller (12-17 Seater)');
+    }
+  };
+
+  const handleChildAgeChange = (index: number, age: number) => {
+    setChildAges((prev) => {
+      const copy = [...prev];
+      copy[index] = age;
+      return copy;
+    });
   };
 
   const handleAddPlace = () => {
@@ -81,22 +136,8 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     setCustomPlaces((prev) => prev.filter((p) => p !== placeToRemove));
   };
 
-  const handleSendWhatsApp = () => {
-    if (!guestName.trim()) {
-      setValidationError('Please provide your Name so we can personalize your itinerary.');
-      return;
-    }
-    const cleanedPhone = guestPhone.replace(/\D/g, '');
-    if (!cleanedPhone) {
-      setValidationError('Please provide your 10-digit mobile number to receive the proposal.');
-      return;
-    }
-    if (cleanedPhone.length !== 10) {
-      setValidationError('Please enter a valid 10-digit mobile number without country code (e.g. 9876543210).');
-      return;
-    }
-    setValidationError(null);
-
+  const buildMessageText = (phoneOverride?: string): string => {
+    const cleanedPhone = (phoneOverride || guestPhone).replace(/\D/g, '');
     const allPlaces = [...selectedDests, ...customPlaces];
     const destList = allPlaces.length > 0 ? allPlaces.join(', ') : 'Munnar, Thekkady, Alleppey';
     const extras: string[] = [];
@@ -104,12 +145,6 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
     if (spiceTour) extras.push('Spice Plantation Tour');
     if (jeepSafari) extras.push('Off-road Jeep Safari');
 
-    // -------------------------------------------------------------
-    // WHATSAPP MESSAGE
-    // -------------------------------------------------------------
-
-    // Emoji characters are generated programmatically to avoid
-    // UTF-8 / browser encoding issues on desktop browsers.
     const emoji = {
       wave: String.fromCodePoint(0x1F44B),
       person: String.fromCodePoint(0x1F464),
@@ -127,7 +162,12 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
       pray: String.fromCodePoint(0x1F64F),
     };
 
-    const msg = [
+    const childAgesFormatted =
+      children > 0 && childAges.length > 0
+        ? ` (Ages: ${childAges.slice(0, children).map((age, i) => `Child ${i + 1}: ${age === 0 ? '<1 yr' : `${age} yrs`}`).join(', ')})`
+        : '';
+
+    return [
       `Hello Travel Care Tours! ${emoji.wave}`,
       'I calculated a custom Kerala holiday plan for you:',
       '',
@@ -137,7 +177,7 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
         ? `${emoji.calendar} Travel Month / Dates: ${travelMonth.trim()}`
         : '',
       `${emoji.palm} Duration: ${nights} Nights / ${nights + 1} Days`,
-      `${emoji.family} Guests: ${adults} Adult(s)${children > 0 ? `, ${children} Child(ren)` : ''}`,
+      `${emoji.family} Guests: ${adults} Adult(s)${children > 0 ? `, ${children} Child(ren)${childAgesFormatted}` : ''}`,
       selectedPackageTitle && selectedPackageTitle !== 'Not decided yet'
         ? `${emoji.target} Package Theme: ${selectedPackageTitle}`
         : '',
@@ -154,36 +194,100 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
       `${emoji.email} Please send me the day-wise itinerary proposal and best price quote.`,
       `Thank you! ${emoji.pray}`,
     ].filter(Boolean).join('\n');
+  };
 
+  const handleSendWhatsApp = async () => {
+    if (!guestName.trim()) {
+      setValidationError('Please provide your Name so we can personalize your itinerary.');
+      return;
+    }
+    const cleanedPhone = guestPhone.replace(/\D/g, '');
+    if (!cleanedPhone) {
+      setValidationError('Please provide your 10-digit mobile number to receive the proposal.');
+      return;
+    }
+    if (cleanedPhone.length !== 10) {
+      setValidationError('Please enter a valid 10-digit mobile number without country code (e.g. 9876543210).');
+      return;
+    }
+    setValidationError(null);
+    setIsSubmitting(true);
 
-    // Automatically sync enquiry with Google Sheets (and local backup)
-    submitTripEnquiry({
-      guestName: guestName.trim(),
-      phone: cleanedPhone,
-      travelMonth: travelMonth.trim(),
-      nights,
-      adults,
-      children,
-      destinations: destList,
-      hotelTier,
-      vehicle,
-      inclusions: extras.join(', ') || 'Standard Package',
-      specialNote: specialNote.trim(),
-      packageTitle: selectedPackageTitle !== 'Not decided yet' ? selectedPackageTitle : undefined,
-    });
+    const allPlaces = [...selectedDests, ...customPlaces];
+    const destList = allPlaces.length > 0 ? allPlaces.join(', ') : 'Munnar, Thekkady, Alleppey';
+    const extras: string[] = [];
+    if (houseboat) extras.push('Private Houseboat Stay');
+    if (spiceTour) extras.push('Spice Plantation Tour');
+    if (jeepSafari) extras.push('Off-road Jeep Safari');
 
-    // -------------------------------------------------------------
-    // SEND TO WHATSAPP
-    // -------------------------------------------------------------
+    const msg = buildMessageText(cleanedPhone);
+    setLastMessageText(msg);
 
-    const whatsappNumber = String(COMPANY_DETAILS.whatsappNumber)
-      .replace(/\D/g, '');
+    // Automatically sync enquiry with Google Sheets (and local storage backup)
+    try {
+      submitTripEnquiry({
+        guestName: guestName.trim(),
+        phone: cleanedPhone,
+        travelMonth: travelMonth.trim(),
+        nights,
+        adults,
+        children,
+        childAges: children > 0 ? childAges.slice(0, children).map((a, i) => `Child ${i + 1}: ${a === 0 ? '<1 yr' : `${a} yrs`}`).join(', ') : undefined,
+        destinations: destList,
+        hotelTier,
+        vehicle,
+        inclusions: extras.join(', ') || 'Standard Package',
+        specialNote: specialNote.trim(),
+        packageTitle: selectedPackageTitle !== 'Not decided yet' ? selectedPackageTitle : undefined,
+      });
+    } catch (err) {
+      console.warn('Enquiry logging error:', err);
+    }
 
+    const whatsappNumber = String(COMPANY_DETAILS.whatsappNumber).replace(/\D/g, '');
     const encodedMessage = encodeURIComponent(msg);
-
     const url = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    setLastWhatsAppUrl(url);
 
+    // Launch WhatsApp
     window.open(url, '_blank');
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+
+    // Trigger instant Toast notification
+    setToast({
+      isOpen: true,
+      type: 'success',
+      title: 'Enquiry Registered Successfully!',
+      message: `Your customized Kerala holiday proposal for ${guestName.trim()} has been generated. Opening WhatsApp with our tour team...`,
+      actionLabel: 'Open WhatsApp',
+      actionUrl: url,
+    });
+  };
+
+  const handleCopyQuote = async () => {
+    try {
+      const textToCopy = lastMessageText || buildMessageText();
+      await navigator.clipboard.writeText(textToCopy);
+      setIsCopied(true);
+      setToast({
+        isOpen: true,
+        type: 'info',
+        title: 'Quotation Copied to Clipboard!',
+        message: 'You can paste your complete Kerala itinerary proposal into any chat or email.',
+      });
+      setTimeout(() => setIsCopied(false), 3500);
+    } catch (err) {
+      console.warn('Clipboard write failed:', err);
+    }
+  };
+
+  const handleSendEmail = () => {
+    const textToSend = lastMessageText || buildMessageText();
+    const subject = encodeURIComponent(`Kerala Tour Package Proposal - ${guestName.trim() || 'Custom Plan'}`);
+    const body = encodeURIComponent(textToSend);
+    window.open(`mailto:${COMPANY_DETAILS.email}?subject=${subject}&body=${body}`, '_blank');
   };
 
   const allSelectedCount = selectedDests.length + customPlaces.length;
@@ -304,8 +408,8 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
               </div>
 
               {/* 2. Duration & Guest count */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-slate-100">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-6 pt-4 border-t border-slate-100">
+                <div className="md:col-span-4 lg:col-span-3">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-1.5">
                     <Calendar className="w-4 h-4 text-brand-green" />
                     <span>Nights: {nights}</span>
@@ -325,7 +429,7 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                   </div>
                 </div>
 
-                <div>
+                <div className="md:col-span-3 lg:col-span-3">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-1.5">
                     <Users className="w-4 h-4 text-brand-green" />
                     <span>Adults</span>
@@ -353,31 +457,64 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                   </div>
                 </div>
 
-                <div>
+                <div className="md:col-span-5 lg:col-span-6">
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center gap-1.5">
                     <Users className="w-4 h-4 text-brand-green" />
                     <span>Children (&lt;12 yrs)</span>
                   </label>
-                  <div className="flex items-center rounded-xl border border-slate-200 overflow-hidden bg-slate-50 min-h-[44px]">
-                    <button
-                      type="button"
-                      onClick={() => setChildren(Math.max(0, children - 1))}
-                      className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
-                      aria-label="Decrease children"
-                    >
-                      -
-                    </button>
-                    <span className="flex-1 text-center text-sm font-bold text-slate-800">
-                      {children}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setChildren(children + 1)}
-                      className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
-                      aria-label="Increase children"
-                    >
-                      +
-                    </button>
+                  {/* Desktop: In the same row as the stepper! Mobile: new row with increased width */}
+                  <div className="flex flex-col md:flex-row md:items-center gap-3">
+                    <div className="flex items-center rounded-xl border border-slate-200 overflow-hidden bg-slate-50 min-h-[44px] w-full md:w-[120px] shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleChildrenChange(children - 1)}
+                        className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
+                        aria-label="Decrease children"
+                      >
+                        -
+                      </button>
+                      <span className="flex-1 text-center text-sm font-bold text-slate-800">
+                        {children}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleChildrenChange(children + 1)}
+                        className="w-12 h-11 flex items-center justify-center text-slate-700 hover:bg-slate-200 active:bg-slate-300 font-bold text-lg cursor-pointer select-none"
+                        aria-label="Increase children"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    {/* Child Age Dropdowns: In the same row for desktop, and as a wide new row for mobile */}
+                    {children > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap items-center gap-2.5 w-full">
+                        {Array.from({ length: children }).map((_, idx) => (
+                          <div key={idx} className="w-full md:w-auto md:min-w-[150px] lg:min-w-[160px] flex-1">
+                            <select
+                              value={childAges[idx] ?? 5}
+                              onChange={(e) => handleChildAgeChange(idx, Number(e.target.value))}
+                              className="w-full h-11 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:border-brand-green focus:bg-white focus:ring-1 focus:ring-brand-green cursor-pointer shadow-2xs"
+                              aria-label={`Age for child ${idx + 1}`}
+                            >
+                              <option value={0}>Child {idx + 1}: &lt;1 yr</option>
+                              <option value={1}>Child {idx + 1}: 1 yr</option>
+                              <option value={2}>Child {idx + 1}: 2 yrs</option>
+                              <option value={3}>Child {idx + 1}: 3 yrs</option>
+                              <option value={4}>Child {idx + 1}: 4 yrs</option>
+                              <option value={5}>Child {idx + 1}: 5 yrs</option>
+                              <option value={6}>Child {idx + 1}: 6 yrs</option>
+                              <option value={7}>Child {idx + 1}: 7 yrs</option>
+                              <option value={8}>Child {idx + 1}: 8 yrs</option>
+                              <option value={9}>Child {idx + 1}: 9 yrs</option>
+                              <option value={10}>Child {idx + 1}: 10 yrs</option>
+                              <option value={11}>Child {idx + 1}: 11 yrs</option>
+                              <option value={12}>Child {idx + 1}: 12 yrs</option>
+                            </select>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -597,7 +734,14 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                   </div>
                   <div className="flex justify-between py-1">
                     <span className="text-slate-500">Guests:</span>
-                    <span className="font-bold text-slate-900">{adults} Adults {children > 0 ? `+ ${children} Kids` : ''}</span>
+                    <span className="font-bold text-slate-900 text-right">
+                      {adults} Adults {children > 0 ? `+ ${children} Kids` : ''}
+                      {children > 0 && childAges.length > 0 && (
+                        <span className="block text-[11px] font-normal text-slate-500">
+                          (Ages: {childAges.slice(0, children).map((a) => (a === 0 ? '<1y' : `${a}y`)).join(', ')})
+                        </span>
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between py-1">
                     <span className="text-slate-500">Destinations:</span>
@@ -618,25 +762,114 @@ export const TripCalculator: React.FC<TripCalculatorProps> = ({
                 </div>
               </div>
 
-              {/* Single, Perfectly Fitted Action Button */}
+              {/* Action Buttons & Submission Feedback */}
               <div className="space-y-3 pt-4 border-t border-slate-200">
-                <button
-                  type="button"
-                  onClick={handleSendWhatsApp}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-sm font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-lg shadow-[#25D366]/25 hover:scale-[1.01] transition-all cursor-pointer whitespace-nowrap"
-                >
-                  <WhatsAppIcon variant="white" className="w-5 h-5 fill-white shrink-0" />
-                  <span className="truncate">Get WhatsApp Quote</span>
-                </button>
+                {isSubmitted ? (
+                  <div className="space-y-3 animate-fadeIn">
+                    {/* Confirmation Badge Card */}
+                    <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1.5">
+                      <div className="flex items-center gap-2 text-emerald-800 font-bold text-xs sm:text-sm">
+                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 shrink-0" />
+                        <span>Enquiry Logged Successfully!</span>
+                      </div>
+                      <p className="text-[11px] sm:text-xs text-emerald-700 leading-relaxed">
+                        Personalized proposal generated for <strong>{guestName.trim()}</strong>. If WhatsApp did not open automatically, tap below:
+                      </p>
+                    </div>
 
-                <p className="text-[11px] text-center text-slate-500">
-                  No payment required. Custom itinerary quote sent to your WhatsApp in minutes.
-                </p>
+                    {/* Direct WhatsApp Re-open CTA */}
+                    <a
+                      href={lastWhatsAppUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] shadow-lg shadow-[#25D366]/25 hover:scale-[1.01] transition-all cursor-pointer text-center"
+                    >
+                      <WhatsAppIcon variant="white" className="w-5 h-5 fill-white shrink-0" />
+                      <span>Open WhatsApp Chat</span>
+                    </a>
+
+                    {/* Quick Secondary Actions */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={handleCopyQuote}
+                        className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+                      >
+                        {isCopied ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                            <span className="text-emerald-700">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5 text-slate-500" />
+                            <span>Copy Quote</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleSendEmail}
+                        className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+                      >
+                        <Mail className="w-3.5 h-3.5 text-slate-500" />
+                        <span>Email Quote</span>
+                      </button>
+                    </div>
+
+                    {/* Reset / Recalculate */}
+                    <button
+                      type="button"
+                      onClick={() => setIsSubmitted(false)}
+                      className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                    >
+                      <RotateCcw className="w-3 h-3" />
+                      <span>Edit details or calculate another</span>
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleSendWhatsApp}
+                      disabled={isSubmitting}
+                      className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-sm font-bold text-white bg-[#25D366] hover:bg-[#20bd5a] disabled:opacity-75 shadow-lg shadow-[#25D366]/25 hover:scale-[1.01] transition-all cursor-pointer whitespace-nowrap"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 text-white animate-spin shrink-0" />
+                          <span>Generating Custom Quote...</span>
+                        </>
+                      ) : (
+                        <>
+                          <WhatsAppIcon variant="white" className="w-5 h-5 fill-white shrink-0" />
+                          <span className="truncate">Get WhatsApp Quote</span>
+                        </>
+                      )}
+                    </button>
+
+                    <p className="text-[11px] text-center text-slate-500">
+                      No payment required. Custom itinerary quote sent to your WhatsApp in minutes.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Floating Interactive Toast Feedback */}
+      <Toast
+        isOpen={toast.isOpen}
+        type={toast.type}
+        title={toast.title}
+        message={toast.message}
+        actionLabel={toast.actionLabel}
+        actionUrl={toast.actionUrl}
+        onClose={() => setToast((prev) => ({ ...prev, isOpen: false }))}
+      />
     </section>
   );
 };

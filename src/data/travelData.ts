@@ -45,7 +45,7 @@ export const DESTINATIONS: Destination[] = [
     subtitle: "Backwaters & houseboat cruises",
     tagline: "The Venice of the East",
     category: "Backwaters",
-    image: "https://lostwithpurpose.com/wp-content/uploads/2016/12/DSC_3368.jpg?auto=format&fit=crop&w=1200&q=85",
+    image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=1200&q=85",
     description: "Glide through tranquil palm-fringed canals, emerald paddy fields, and serene lagoons aboard a traditional thatch-roof Kerala houseboat with authentic onboard meals.",
     keyAttractions: ["Private Houseboat Cruise", "Vembanad Lake", "Alappuzha Beach & Lighthouse", "Canoe Village Tours", "Marari Beach"],
     bestTime: "Year Round (Winter Best)"

@@ -3,6 +3,7 @@ import { Clock, MapPin, ArrowRight, FileText, CheckCircle2 } from 'lucide-react'
 import { TourPackage } from '../types';
 import { COMPANY_DETAILS } from '../data/travelData';
 import { WhatsAppIcon } from './WhatsAppIcon';
+import { handleImageFallback } from '../utils/imageFallback';
 
 interface PackageCardProps {
   pkg: TourPackage;
@@ -27,6 +28,9 @@ export const PackageCard: React.FC<PackageCardProps> = ({
           src={pkg.image}
           alt={pkg.title}
           referrerPolicy="no-referrer"
+          loading="lazy"
+          decoding="async"
+          onError={(e) => handleImageFallback(e, pkg.category)}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20" />

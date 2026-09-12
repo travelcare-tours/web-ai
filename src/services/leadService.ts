@@ -7,6 +7,7 @@ export interface TripEnquiryData {
   nights: number;
   adults: number;
   children: number;
+  childAges?: string;
   destinations: string;
   hotelTier: string;
   vehicle: string;
@@ -56,6 +57,7 @@ export async function submitTripEnquiry(data: TripEnquiryData): Promise<{ succes
       nights: String(payload.nights),
       adults: String(payload.adults),
       children: String(payload.children || 0),
+      childAges: payload.childAges || '',
       destinations: payload.destinations,
       hotelTier: payload.hotelTier,
       vehicle: payload.vehicle,

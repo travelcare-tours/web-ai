@@ -11,6 +11,7 @@ import {
   ChevronRight,
   MapPin,
 } from 'lucide-react';
+import { handleImageFallback } from '../utils/imageFallback';
 
 // Scenic Kerala background slides for the hero carousel (Kochi first, then Munnar)
 const HERO_BACKGROUND_SLIDES = [
@@ -27,7 +28,7 @@ const HERO_BACKGROUND_SLIDES = [
   {
     title: "Alleppey",
     subtitle: "Tranquil Backwaters & Houseboat Cruises",
-    image: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=2000&q=85",
+    image: "https://lostwithpurpose.com/wp-content/uploads/2016/12/DSC_3368.jpg?auto=format&fit=crop&w=2000&q=85",
   },
   {
     title: "Kovalam",
@@ -83,7 +84,7 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section
       id="home"
-      className="relative min-h-[540px] sm:min-h-[580px] h-[calc(100svh-4rem)] sm:h-[calc(100svh-5rem)] max-h-[920px] flex flex-col justify-between overflow-hidden pt-4 sm:pt-8 pb-3 sm:pb-6 px-4 sm:px-6 lg:px-8"
+      className="relative min-h-[580px] sm:min-h-[640px] h-[100svh] max-h-[960px] flex flex-col justify-between overflow-hidden pt-20 sm:pt-28 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -102,6 +103,7 @@ export const Hero: React.FC<HeroProps> = ({
                 src={slide.image}
                 alt={`${slide.title} - Kerala`}
                 referrerPolicy="no-referrer"
+                onError={(e) => handleImageFallback(e, slide.title)}
                 className={`w-full h-full object-cover object-center transition-transform duration-[6500ms] ease-out ${
                   isActive ? 'scale-105' : 'scale-100'
                 }`}

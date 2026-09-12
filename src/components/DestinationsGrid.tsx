@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus, Check, ArrowUpRight } from 'lucide-react';
 import { DESTINATIONS } from '../data/travelData';
+import { handleImageFallback } from '../utils/imageFallback';
 
 interface DestinationsGridProps {
   onSelectDestination: (destName: string) => void;
@@ -49,6 +50,9 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                   src={dest.image}
                   alt={dest.name}
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => handleImageFallback(e, dest.id)}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
 
