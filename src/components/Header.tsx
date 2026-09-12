@@ -150,6 +150,13 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
               Destinations
             </a>
             <a
+              href="#services"
+              onClick={(e) => handleNavClick(e, 'services')}
+              className="hidden lg:inline-block hover:text-brand-green transition-colors py-1 font-medium"
+            >
+              Services
+            </a>
+            <a
               href="#trip-planner"
               onClick={(e) => handleNavClick(e, 'trip-planner')}
               className="hidden lg:inline-block hover:text-brand-green transition-colors py-1 font-semibold text-brand-navy"
@@ -238,6 +245,13 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
                 className="md:hidden px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
               >
                 Kerala Destinations
+              </a>
+              <a
+                href="#services"
+                onClick={(e) => handleNavClick(e, 'services')}
+                className="px-3 py-2 rounded-xl hover:bg-slate-100 hover:text-brand-green transition-colors"
+              >
+                Cab, Hotel &amp; Houseboat Services
               </a>
               <a
                 href="#trip-planner"

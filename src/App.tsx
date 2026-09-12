@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { PackagesSection } from './components/PackagesSection';
 import { DestinationsGrid } from './components/DestinationsGrid';
+import { ServicesSection } from './components/ServicesSection';
 import { TripCalculator } from './components/TripCalculator';
 import { WhyUs } from './components/WhyUs';
 import { FaqSection } from './components/FaqSection';
@@ -76,7 +77,10 @@ export default function App() {
           selectedDestinations={selectedDestinations}
         />
 
-        {/* 4. Interactive Instant Trip Planner & WhatsApp Quote */}
+        {/* 4. Standalone Services: Cab Services, Hotel & Houseboat Booking */}
+        <ServicesSection onPlanTripClick={() => scrollToSection('trip-planner')} />
+
+        {/* 5. Interactive Instant Trip Planner & WhatsApp Quote */}
         <TripCalculator
           selectedDests={selectedDestinations}
           onToggleDest={handleToggleDestination}
