@@ -18,7 +18,7 @@ export const COMPANY_DETAILS = {
   address: "Ground Flr, Mannath Bld, 36/267. Seaport-Airport Rd, Thrikkakara Ernakulam, Kerala",
   experience: "12+ Years",
   openingHours: "Open Daily 6:00 AM – 10:00 PM (16/7 Guest Support)",
-  website: "https://travelcare-tours.github.io/web-ai",
+  website: "https://travelcaretours.in",
   // Optional: Paste your Google Apps Script Web App URL here or set VITE_GOOGLE_SHEET_WEBHOOK_URL in .env
   googleSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbyZjrG1vzNOf-P3Jl0Scs3ml2X0ey0YYDsWA9yA8LO48pDL-AR4iO_qivvp3LQppBKv/exec",
 };
@@ -454,5 +454,20 @@ export const FAQS: FAQItem[] = [
     question: "Is Kerala safe for family travelers and senior citizens?",
     answer: "Kerala has one of the highest safety ratings in India with courteous locals, peaceful tourist centers, and world-class healthcare facilities. We specifically select hotels with ground-floor rooms or elevators, and our drivers ensure gentle, comfortable driving on hill roads.",
     category: "Safety"
+  },
+  {
+    question: "Do you organize Kerala tour packages for travelers from Delhi, Mumbai, Bangalore, and across India?",
+    answer: "Yes! Over 80% of our guests arrive from major Indian metros including Delhi NCR, Mumbai, Pune, Bengaluru, Hyderabad, Chennai, Kolkata, and Ahmedabad. We coordinate seamless airport pickups at Cochin International Airport (COK) or Trivandrum (TRV) directly synchronized with your domestic flight or train timings.",
+    category: "Pan-India Travel"
+  },
+  {
+    question: "Is Pure Vegetarian, Jain, or North Indian food easily available during the tour?",
+    answer: "Yes, absolutely. Every popular destination in Kerala (Munnar, Thekkady, Alleppey, Kochi, Kovalam) has excellent Pure Vegetarian, Gujarati, Marwari, and North Indian restaurants. Our local chauffeurs know the finest hygienic dining spots along every highway and hill route, and our Alleppey houseboats can prepare 100% vegetarian meals upon prior request.",
+    category: "Dining"
+  },
+  {
+    question: "Which airport should we book our flights to for a Kerala holiday?",
+    answer: "For most popular itineraries covering Munnar, Thekkady, and Alleppey, we recommend booking flights arriving at Cochin International Airport (COK). If your tour finishes in Kovalam or Kanyakumari, you can depart conveniently from Trivandrum International Airport (TRV). Our travel desk will advise you on the most cost-effective flight route before you book tickets.",
+    category: "Flights & Connectivity"
   }
 ];

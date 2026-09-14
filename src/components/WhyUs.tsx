@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Hotel, Palmtree, MessageSquareQuote, CheckCircle2 } from 'lucide-react';
+import { Route, Hotel, Palmtree, MessageSquareQuote, Plane, Utensils, Languages, ShieldCheck } from 'lucide-react';
 
 export const WhyUs: React.FC = () => {
   const pillars = [
@@ -88,6 +88,44 @@ export const WhyUs: React.FC = () => {
               </div>
             );
           })}
+        </div>
+
+        {/* Pan-India Guest Connectivity Banner */}
+        <div className="mt-10 sm:mt-12 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider border border-blue-100">
+                <Plane className="w-3.5 h-3.5" />
+                <span>Pan-India Flight &amp; Train Pickups</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold font-display text-brand-navy">
+                Welcoming Guests from Across India &amp; Worldwide
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Daily private pickups at Cochin International Airport (COK) and Trivandrum (TRV) connecting regular flights from Delhi NCR, Mumbai, Bengaluru, Hyderabad, Chennai, Ahmedabad, Kolkata, and Pune.
+              </p>
+            </div>
+
+            {/* Feature Highlights Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full lg:w-auto shrink-0">
+              <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-700">
+                <Plane className="w-4 h-4 text-brand-green shrink-0" />
+                <span>Airport &amp; Station Chauffeur Meet</span>
+              </div>
+              <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-700">
+                <Utensils className="w-4 h-4 text-brand-green shrink-0" />
+                <span>Pure Veg &amp; Jain Food Coordination</span>
+              </div>
+              <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-700">
+                <Languages className="w-4 h-4 text-brand-green shrink-0" />
+                <span>Hindi &amp; English Fluent Drivers</span>
+              </div>
+              <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-700">
+                <ShieldCheck className="w-4 h-4 text-brand-green shrink-0" />
+                <span>Govt-Approved Licensed Fleet</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

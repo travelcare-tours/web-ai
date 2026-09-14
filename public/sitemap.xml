@@ -2,13 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://travelcare-tours.github.io/web-ai/</loc>
-    <lastmod>2026-09-11</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://travelcaretours.in/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://travelcare-tours.github.io/web-ai/assets/TC_logo.png</image:loc>
-      <image:title>Travel Care Tours Pvt Ltd - Kerala Tour Operator</image:title>
+      <image:loc>https://travelcaretours.in/assets/TC_logo.png</image:loc>
+      <image:title>Travel Care Tours Pvt Ltd - Kerala Tour Packages &amp; Custom Holidays</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Munnar Tea Gardens Kerala</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Alleppey Backwaters Houseboat Cruise</image:title>
     </image:image>
   </url>
 </urlset>
+

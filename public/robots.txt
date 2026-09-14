@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://travelcare-tours.github.io/web-ai/sitemap.xml
+Sitemap: https://travelcaretours.in/sitemap.xml
