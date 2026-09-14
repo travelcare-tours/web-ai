@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
 import { COMPANY_DETAILS, TOUR_PACKAGES } from '../data/travelData';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -40,23 +41,71 @@ export const Footer: React.FC = () => {
               Your Journey, Our Care. Licensed destination travel specialists crafting personalized Kerala holidays, backwater houseboats, and private chauffeur journeys.
             </p>
 
-            <div className="pt-1 space-y-2 text-xs text-slate-300">
+            <div className="pt-2 space-y-2.5 text-xs text-slate-300">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-3.5 h-3.5 text-brand-green-soft shrink-0 mt-0.5" />
                 <span className="leading-snug text-slate-400">
                   {COMPANY_DETAILS.address}
                 </span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <Phone className="w-3.5 h-3.5 text-brand-green-soft shrink-0" />
-                <a
-                  href={`tel:${COMPANY_DETAILS.phone.replace(/\s+/g, '')}`}
-                  className="hover:text-white transition-colors"
-                >
-                  {COMPANY_DETAILS.phone}
-                </a>
+
+              {/* Business Numbers */}
+              <div className="pt-1.5 space-y-1.5">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Call &amp; WhatsApp Support
+                </p>
+
+                {/* Primary & WhatsApp */}
+                <div className="flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-brand-green-soft shrink-0" />
+                  <a
+                    href={`tel:${COMPANY_DETAILS.phone.replace(/\s+/g, '')}`}
+                    className="hover:text-white font-medium transition-colors"
+                  >
+                    {COMPANY_DETAILS.phone}
+                  </a>
+                  <a
+                    href={`https://wa.me/${COMPANY_DETAILS.whatsappNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#25D366]/20 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all text-[11px] font-bold ml-1"
+                    title="Chat on WhatsApp"
+                  >
+                    <WhatsAppIcon variant="green" className="w-3 h-3 fill-current" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+
+                {/* Booking Desk */}
+                <div className="flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-brand-green-soft shrink-0" />
+                  <a
+                    href={`tel:${COMPANY_DETAILS.phoneSecondary.replace(/\s+/g, '')}`}
+                    className="hover:text-white font-medium transition-colors"
+                  >
+                    {COMPANY_DETAILS.phoneSecondary}
+                  </a>
+                  <span className="text-[10px] font-semibold text-slate-400 px-1.5 py-0.5 rounded bg-white/5 border border-white/10">
+                    Booking Desk
+                  </span>
+                </div>
+
+                {/* Support Helpline */}
+                <div className="flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                  <a
+                    href={`tel:${COMPANY_DETAILS.phoneAlt.replace(/\s+/g, '')}`}
+                    className="hover:text-white text-slate-400 transition-colors"
+                  >
+                    {COMPANY_DETAILS.phoneAlt}
+                  </a>
+                  <span className="text-[10px] text-slate-500">
+                    (Helpline)
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2.5">
+
+              <div className="flex items-center gap-2.5 pt-1">
                 <Mail className="w-3.5 h-3.5 text-brand-green-soft shrink-0" />
                 <a
                   href={`mailto:${COMPANY_DETAILS.email}`}

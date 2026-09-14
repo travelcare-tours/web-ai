@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
+import { COMPANY_DETAILS } from '../data/travelData';
+import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface HeaderProps {
   onPlanTripClick?: () => void;
@@ -274,6 +276,35 @@ export const Header: React.FC<HeaderProps> = ({ onPlanTripClick }) => {
               >
                 FAQs
               </a>
+              {/* Contact Helpline & WhatsApp */}
+              <div className="pt-2.5 mt-2 border-t border-slate-100 space-y-2">
+                <p className="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Direct Helpline &amp; WhatsApp
+                </p>
+                <div className="grid grid-cols-2 gap-2 px-2">
+                  <a
+                    href={`tel:${COMPANY_DETAILS.phone.replace(/\s+/g, '')}`}
+                    className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-brand-green" />
+                    <span>Call Desk</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/${COMPANY_DETAILS.whatsappNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold transition-colors"
+                  >
+                    <WhatsAppIcon variant="white" className="w-3.5 h-3.5 fill-white shrink-0" />
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
+                <div className="px-3 text-[11px] text-slate-500 flex justify-between">
+                  <span>{COMPANY_DETAILS.phone}</span>
+                  <span>{COMPANY_DETAILS.phoneSecondary}</span>
+                </div>
+              </div>
+
               {/* On mobile, also provide a Plan Trip button inside dropdown */}
               <div className="sm:hidden pt-2 border-t border-slate-100">
                 <button
